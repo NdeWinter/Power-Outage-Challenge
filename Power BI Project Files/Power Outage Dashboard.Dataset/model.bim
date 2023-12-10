@@ -1,0 +1,1490 @@
+{
+  "compatibilityLevel": 1601,
+  "model": {
+    "annotations": [
+      {
+        "name": "__PBI_TimeIntelligenceEnabled",
+        "value": "0"
+      },
+      {
+        "name": "PBIDesktopVersion",
+        "value": "2.123.742.0 (23.11)"
+      },
+      {
+        "name": "PBI_ProTooling",
+        "value": "[\"DevMode\",\"CalcGroup\"]"
+      },
+      {
+        "name": "PBI_QueryOrder",
+        "value": "[\"NERC Regions\",\"Alert Criteria\",\"Reports\",\"Filtered Rows\",\"NERC Region Bridge\",\"Measurements\",\"Emergency Causes\",\"Emergency Impacts\",\"Emergency Actions\"]"
+      }
+    ],
+    "culture": "en-US",
+    "cultures": [
+      {
+        "name": "en-US",
+        "linguisticMetadata": {
+          "content": {
+            "DynamicImprovement": "HighConfidence",
+            "Language": "en-US",
+            "Version": "1.0.0"
+          },
+          "contentType": "json"
+        }
+      }
+    ],
+    "dataAccessOptions": {
+      "legacyRedirects": true,
+      "returnErrorValuesAsNull": true
+    },
+    "defaultPowerBIDataSourceVersion": "powerBI_V3",
+    "discourageImplicitMeasures": true,
+    "queryGroups": [
+      {
+        "annotations": [
+          {
+            "name": "PBI_QueryGroupOrder",
+            "value": "3"
+          }
+        ],
+        "folder": "Facts"
+      },
+      {
+        "annotations": [
+          {
+            "name": "PBI_QueryGroupOrder",
+            "value": "0"
+          }
+        ],
+        "folder": "Dimensions"
+      },
+      {
+        "annotations": [
+          {
+            "name": "PBI_QueryGroupOrder",
+            "value": "2"
+          }
+        ],
+        "folder": "Support Tables"
+      }
+    ],
+    "relationships": [
+      {
+        "name": "814e02b6-4083-4abb-ba7c-fee585881ffd",
+        "fromColumn": "Date Event Began",
+        "fromTable": "Reports",
+        "toColumn": "Date",
+        "toTable": "Calendar"
+      },
+      {
+        "name": "98626f3e-dfe9-4927-bc9c-d0faa4e9a044",
+        "fromColumn": "NERC Region",
+        "fromTable": "NERC Region Bridge",
+        "toColumn": "NERC",
+        "toTable": "NERC Regions"
+      },
+      {
+        "name": "780c3cac-e88b-4a36-a1e7-65f94b3f342f",
+        "fromColumn": "Action ID",
+        "fromTable": "Reports",
+        "toColumn": "ID",
+        "toTable": "Emergency Actions"
+      },
+      {
+        "name": "46301637-b043-4ae8-b699-d98c0fb4e29e",
+        "fromColumn": "Cause ID",
+        "fromTable": "Reports",
+        "toColumn": "ID",
+        "toTable": "Emergency Causes"
+      },
+      {
+        "name": "7dc78659-c29f-481c-9afc-0f12c684d52c",
+        "fromColumn": "Impact ID",
+        "fromTable": "Reports",
+        "toColumn": "ID",
+        "toTable": "Emergency Impacts"
+      },
+      {
+        "name": "507375d0-8867-4d27-a976-71968f83a2f4",
+        "fromColumn": "Report Type ID",
+        "fromTable": "Reports",
+        "toColumn": "ID",
+        "toTable": "Alert Criteria"
+      },
+      {
+        "name": "59ba0dd5-0e05-4036-92bf-0365ec0da70d",
+        "crossFilteringBehavior": "bothDirections",
+        "fromColumn": "Event ID",
+        "fromTable": "NERC Region Bridge",
+        "toColumn": "Event ID",
+        "toTable": "Reports"
+      }
+    ],
+    "sourceQueryCulture": "nl-NL",
+    "tables": [
+      {
+        "name": "NERC Regions",
+        "annotations": [
+          {
+            "name": "PBI_NavigationStepName",
+            "value": "Navigation"
+          },
+          {
+            "name": "PBI_ResultType",
+            "value": "Table"
+          }
+        ],
+        "columns": [
+          {
+            "name": "NERC",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "string",
+            "lineageTag": "6103df4c-f1bc-4424-96d0-eaaf3761f86f",
+            "sourceColumn": "NERC",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "Index",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "User"
+              }
+            ],
+            "dataType": "int64",
+            "formatString": "0",
+            "lineageTag": "039da0ca-4692-423c-a8a5-182ca55de1e4",
+            "sourceColumn": "Index",
+            "summarizeBy": "none"
+          }
+        ],
+        "lineageTag": "0158ae79-5f56-4916-bb4c-3ef322e8e10e",
+        "partitions": [
+          {
+            "name": "NERC Regions",
+            "mode": "import",
+            "queryGroup": "Dimensions",
+            "source": {
+              "expression": [
+                "let",
+                "    Source = Json.Document(File.Contents(\"C:\\Users\\niels\\OneDrive\\7. Portfolio Data Analytics\\Challenges\\Maven Analytics - Power Outage\\Geo Mapping\\regions.geojson\")),",
+                "    #\"Converted to Table\" = Table.FromRecords({Source}),",
+                "    #\"Expanded crs\" = Table.ExpandRecordColumn(#\"Converted to Table\", \"crs\", {\"type\", \"properties\"}, {\"crs.type\", \"crs.properties\"}),",
+                "    #\"Expanded crs.properties\" = Table.ExpandRecordColumn(#\"Expanded crs\", \"crs.properties\", {\"name\"}, {\"crs.properties.name\"}),",
+                "    #\"Expanded features\" = Table.ExpandListColumn(#\"Expanded crs.properties\", \"features\"),",
+                "    #\"Expanded features1\" = Table.ExpandRecordColumn(#\"Expanded features\", \"features\", {\"type\", \"properties\", \"geometry\"}, {\"features.type\", \"features.properties\", \"features.geometry\"}),",
+                "    #\"Expanded features.properties\" = Table.ExpandRecordColumn(#\"Expanded features1\", \"features.properties\", {\"NERC\"}, {\"features.properties.NERC\"}),",
+                "    #\"Removed Other Columns\" = Table.SelectColumns(#\"Expanded features.properties\",{\"features.properties.NERC\"}),",
+                "    #\"Added Index\" = Table.AddIndexColumn(#\"Removed Other Columns\", \"Index\", 1, 1, Int64.Type),",
+                "    #\"Reordered Columns\" = Table.ReorderColumns(#\"Added Index\",{\"Index\", \"features.properties.NERC\"}),",
+                "    #\"Renamed Columns\" = Table.RenameColumns(#\"Reordered Columns\",{{\"features.properties.NERC\", \"NERC\"}})",
+                "in",
+                "    #\"Renamed Columns\""
+              ],
+              "type": "m"
+            }
+          }
+        ]
+      },
+      {
+        "name": "Reports",
+        "annotations": [
+          {
+            "name": "PBI_NavigationStepName",
+            "value": "Navigation"
+          },
+          {
+            "name": "PBI_ResultType",
+            "value": "Table"
+          }
+        ],
+        "columns": [
+          {
+            "name": "Date Event Began",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              },
+              {
+                "name": "UnderlyingDateTimeDataType",
+                "value": "Date"
+              }
+            ],
+            "changedProperties": [
+              {
+                "property": "IsHidden"
+              }
+            ],
+            "dataType": "dateTime",
+            "formatString": "Long Date",
+            "isHidden": true,
+            "lineageTag": "50352ca3-cdaf-4aba-bded-b101aca94035",
+            "sourceColumn": "Date Event Began",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "Time Event Began",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              },
+              {
+                "name": "UnderlyingDateTimeDataType",
+                "value": "Time"
+              }
+            ],
+            "dataType": "dateTime",
+            "formatString": "Long Time",
+            "lineageTag": "e61567bc-9822-4515-adbe-06f1f8c5ea2c",
+            "sourceColumn": "Time Event Began",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "Date of Restoration",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              },
+              {
+                "name": "UnderlyingDateTimeDataType",
+                "value": "Date"
+              }
+            ],
+            "dataType": "dateTime",
+            "formatString": "Long Date",
+            "lineageTag": "848e9fe4-a72f-4c98-97f3-3d0d19ea8d35",
+            "sourceColumn": "Date of Restoration",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "Time of Restoration",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              },
+              {
+                "name": "UnderlyingDateTimeDataType",
+                "value": "Time"
+              }
+            ],
+            "dataType": "dateTime",
+            "formatString": "Long Time",
+            "lineageTag": "93683e21-1843-40c8-acb5-f731c1fd4d9e",
+            "sourceColumn": "Time of Restoration",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "Area Affected",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "string",
+            "lineageTag": "f2190f26-8876-4109-9fbe-742f3a65e47f",
+            "sourceColumn": "Area Affected",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "NERC Region",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "changedProperties": [
+              {
+                "property": "IsHidden"
+              }
+            ],
+            "dataType": "string",
+            "isHidden": true,
+            "lineageTag": "7ff5e9b7-8084-4de9-b640-81b8b6277ec6",
+            "sourceColumn": "NERC Region",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "Demand Loss (MW)",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "int64",
+            "formatString": "0",
+            "lineageTag": "0323bdba-d698-465d-98a2-41b3f892ce81",
+            "sourceColumn": "Demand Loss (MW)",
+            "summarizeBy": "sum"
+          },
+          {
+            "name": "Number of Customers Affected",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "int64",
+            "formatString": "0",
+            "lineageTag": "18c24804-db67-4986-8ff8-31f7638834de",
+            "sourceColumn": "Number of Customers Affected",
+            "summarizeBy": "sum"
+          },
+          {
+            "name": "Report Type ID",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "User"
+              }
+            ],
+            "changedProperties": [
+              {
+                "property": "IsHidden"
+              }
+            ],
+            "dataType": "int64",
+            "formatString": "0",
+            "isHidden": true,
+            "lineageTag": "fd37b215-6bd2-4bb5-a93b-b81c99f22d27",
+            "sourceColumn": "Report Type ID",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "Cause ID",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "User"
+              }
+            ],
+            "changedProperties": [
+              {
+                "property": "IsHidden"
+              }
+            ],
+            "dataType": "int64",
+            "formatString": "0",
+            "isHidden": true,
+            "lineageTag": "8214478b-3d5d-479b-b45e-adb6fe059a61",
+            "sourceColumn": "Cause ID",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "Impact ID",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "User"
+              }
+            ],
+            "changedProperties": [
+              {
+                "property": "IsHidden"
+              }
+            ],
+            "dataType": "int64",
+            "formatString": "0",
+            "isHidden": true,
+            "lineageTag": "77f6a323-061a-4804-8fe5-5ab3076fe1c9",
+            "sourceColumn": "Impact ID",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "Action ID",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "User"
+              }
+            ],
+            "changedProperties": [
+              {
+                "property": "IsHidden"
+              }
+            ],
+            "dataType": "int64",
+            "formatString": "0",
+            "isHidden": true,
+            "lineageTag": "f9fcb4e8-945a-4692-981e-3d799f971fbd",
+            "sourceColumn": "Action ID",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "Event ID",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "int64",
+            "formatString": "0",
+            "lineageTag": "25c2af76-fef9-4f19-8946-90497552c22d",
+            "sourceColumn": "Event ID",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "Outage Time",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              },
+              {
+                "name": "PBI_FormatHint",
+                "value": "{\"isGeneralNumber\":true}"
+              }
+            ],
+            "dataType": "int64",
+            "lineageTag": "24920e23-a3b0-42e1-977d-0b5c26379e44",
+            "sourceColumn": "Outage Time",
+            "summarizeBy": "sum"
+          }
+        ],
+        "lineageTag": "3304298d-8247-4c02-b5eb-ae8722b31cd0",
+        "partitions": [
+          {
+            "name": "Reports",
+            "mode": "import",
+            "queryGroup": "Facts",
+            "source": {
+              "expression": [
+                "let",
+                "    Source = Python.Execute(\"import pandas as pd#(lf)import seaborn as sns#(lf)import geopandas as gpd#(lf)#(lf)from dateutil import parser#(lf)#(lf)# Import dataset#(lf)path = r'C:\\Users\\niels\\OneDrive\\7. Portfolio Data Analytics\\Challenges\\Maven Analytics - Power Outage\\Data\\DOE_Electric_Disturbance_Events.xlsx'#(lf)wb = pd.read_excel(path, sheet_name=None)#(lf)#(lf)# Prepare dataframes#(lf)data = pd.DataFrame()#(lf)data_removed = pd.DataFrame()#(lf)#(lf)# Lists for cleaning data#(lf)#(lf)# List of values for filtering \"\"Date Event Began\"\" column#(lf)values_to_exclude = ['january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october',#(lf)                     'november', 'december', 'none', 'table b.2.', 'date', 'date/time', 'date event began', 'ongoing', 'na', 'note', 'continued', 'estimated', 'source', 'http', 'information']#(lf)#(lf)# Values to format#(lf)values_to_replace = ['ongoing', 'unknown',#(lf)                     'unknown ', 'unkonwn', 'none', 'nan', 'NaT']#(lf)#(lf)# Values to 0#(lf)strings_to_zero = ['unknown']#(lf)#(lf)#(lf)'''Functions'''#(lf)#(lf)# Functions for cleaning and convert date, time and datetime values#(lf)#(lf)# Parsing time strings#(lf)#(lf)#(lf)def parse_time_string(time_string, show_errors=False):#(lf)    if pd.notna(time_string):#(lf)        original_value = time_string#(lf)#(lf)        # Remove incorrect string values before parsing#(lf)        try:#(lf)            time_string = time_string.lower().replace(',', ' ')#(lf)            time_string = time_string.lower().replace(': ', ':')#(lf)            time_string = time_string.lower().replace('noon', 'p.m.')#(lf)            time_string = time_string.lower().replace('unknown', '')#(lf)            time_string = time_string.lower().replace('12:00 midnight', '00:00')#(lf)            time_string = time_string.lower().replace('midnight', '00:00')#(lf)            time_string = time_string.lower().replace('evening', '5 p.m.')#(lf)            time_string = time_string.lower().replace('ongoing', ' ')#(lf)            time_string = time_string.lower().replace('approximately', '')#(lf)            time_string = time_string.lower().replace('approximately ', '')#(lf)#(lf)            # Parse time with parser#(lf)            parsed_time = parser.parse(time_string)#(lf)            formatted_time = parsed_time.strftime('%H:%M:%S')#(lf)#(lf)            return formatted_time#(lf)        except ValueError as e:#(lf)            try:#(lf)                # If parser gives an error, try pd.to_datetime() or print error#(lf)                numeric_time = pd.to_numeric(#(lf)                    original_value, errors='coerce') * 24 * 3600#(lf)                formatted_time = pd.to_datetime(#(lf)                    numeric_time, unit='s', errors='coerce').time()#(lf)#(lf)                return formatted_time#(lf)#(lf)            except ValueError as e:#(lf)                # If both approaches fail, print the error for checking and keep original value#(lf)                if show_errors and time_string != 'NaN' and time_string != 'nan' and time_string != 'nat':#(lf)                    print(f\"\"Error parsing time string '{time_string}': {e}\"\")#(lf)                return original_value#(lf)#(lf)    else:#(lf)        return pd.NaT#(lf)#(lf)# Parsing datetime strings#(lf)#(lf)#(lf)def parse_datetime_string(datetime_string, show_errors=False):#(lf)    if pd.notna(datetime_string):#(lf)        original_value = datetime_string#(lf)#(lf)        # Remove incorrect string values before parsing#(lf)        try:#(lf)            datetime_string = datetime_string.lower().replace(',', ' ')#(lf)            datetime_string = datetime_string.lower().replace(': ', ':')#(lf)            datetime_string = datetime_string.lower().replace('noon', 'p.m.')#(lf)            datetime_string = datetime_string.lower().replace('midnight', 'a.m.')#(lf)            datetime_string = datetime_string.lower().replace('unknown', '')#(lf)            datetime_string = datetime_string.lower().replace('ongoing', '')#(lf)            datetime_string = datetime_string.lower().replace('12:00 midnight', '00:00')#(lf)            datetime_string = datetime_string.lower().replace('approximately', '')#(lf)            datetime_string = datetime_string.lower().replace('approximately ', '')#(lf)            datetime_string = datetime_string.lower().replace('(trans. only)', '')#(lf)#(lf)            # Parse time with parser#(lf)            parsed_datetime = parser.parse(datetime_string)#(lf)            formatted_datetime = parsed_datetime.strftime('%Y-%m-%d %H:%M:%S')#(lf)#(lf)            return pd.to_datetime(formatted_datetime)#(lf)#(lf)        # Print error#(lf)        except ValueError as e:#(lf)            if show_errors and datetime_string != 'nan' and datetime_string != 'NaT' and datetime_string != 'nat':#(lf)                print(#(lf)                    f\"\"Error parsing datetime string '{datetime_string}': {e}\"\")#(lf)            return original_value#(lf)#(lf)    else:#(lf)        return pd.NaT#(lf)#(lf)# Parsing date strings#(lf)#(lf)#(lf)def parse_date_string(date_string, show_errors=False):#(lf)    if pd.notna(date_string):#(lf)        original_value = date_string#(lf)#(lf)        # Remove incorrect string values before parsing#(lf)        try:#(lf)            date_string = date_string.lower().replace(',', ' ')#(lf)            date_string = date_string.lower().replace(': ', ':')#(lf)            date_string = date_string.lower().replace('//', '/')#(lf)            date_string = date_string.lower().replace('unknown', '')#(lf)            date_string = date_string.lower().replace('44641', '31-03-2022')#(lf)#(lf)            # Parse time with parser#(lf)            parsed_date = parser.parse(date_string)#(lf)            formatted_date = parsed_date.strftime('%Y-%m-%d')#(lf)#(lf)            return pd.to_datetime(formatted_date)#(lf)#(lf)        # Print error#(lf)        except ValueError as e:#(lf)            if show_errors and date_string != 'NaT' and date_string != 'nat' and date_string != 'nan':#(lf)                print(f\"\"Error parsing date string '{date_string}': {e}\"\")#(lf)#(lf)            return original_value#(lf)    else:#(lf)        return pd.NaT#(lf)#(lf)# Functions for parsing Alert Criteria and Event Type column#(lf)#(lf)#(lf)def report_type_id(row):#(lf)    if pd.isna(row) or row == '':#(lf)        return None#(lf)#(lf)    id_1 = ['physical attack that causes major interruptions or impacts']#(lf)    id_2 = ['cyber event that causes interruptions',#(lf)            'reportable cyber security incident']#(lf)    id_3 = ['complete operational failure']#(lf)    id_4 = ['islanding']#(lf)    id_5 = ['uncontrolled loss of 300 megawatts or more of firm system loads']#(lf)    id_6 = ['firm load shedding of 100 megawatts',#(lf)            'load shedding of 100 megawatts or more', 'load shed 100']#(lf)    id_7 = ['voltage reductions of 3 percent', 'voltage reduction']#(lf)    id_8 = ['public appeal to reduce']#(lf)    id_9 = ['physical attack that could potentially impact electric power system',#(lf)            'actual physical attack']#(lf)    id_10 = ['cyber event that could potentially impact electric power system',#(lf)             'cyber security incident that was an attempt to compromise', 'suspected cyber attack']#(lf)    id_11 = ['loss of electric service to more than 50,000 customers']#(lf)    id_12 = ['fuel supply emergencies that could impact electric power system']#(lf)    id_13 = ['damage or destruction of a facility within its reliability coordinator']#(lf)    id_14 = ['damage or destruction of its facility that results from actual or suspected intentional human action',#(lf)             'suspected physical attack']#(lf)    id_15 = [#(lf)        'physical threat to its facility excluding weather or natural disaster related threats']#(lf)    id_16 = [#(lf)        'physical threat to its bulk electric system control center, excluding weather']#(lf)    id_17 = ['bulk electric system emergency resulting in voltage deviation',#(lf)             'voltage deviation equal to or greater than 10%']#(lf)    id_18 = [#(lf)        'uncontrolled loss of 200 megawatts or more of firm system loads for 15 minutes or more']#(lf)    id_19 = [#(lf)        'total generation loss, within one minute of: greater than or equal to 2,000 megawatts']#(lf)    id_20 = ['affecting a nuclear generating station']#(lf)    id_21 = ['unexpected transmission loss within its area, contrary to design, of three or more bulk electric system facilities']#(lf)    id_22 = ['unplanned evacuation']#(lf)    id_23 = [#(lf)        'complete loss of interpersonal communication and alternative interpersonal communication']#(lf)    id_24 = ['loss of monitoring or control']#(lf)#(lf)    if any(keyword in row.lower() for keyword in id_1):#(lf)        return 1#(lf)#(lf)    elif any(keyword in row.lower() for keyword in id_2):#(lf)        return 2#(lf)#(lf)    elif any(keyword in row.lower() for keyword in id_3):#(lf)        return 3#(lf)#(lf)    elif any(keyword in row.lower() for keyword in id_4):#(lf)        return 4#(lf)#(lf)    elif any(keyword in row.lower() for keyword in id_5):#(lf)        return 5#(lf)#(lf)    elif any(keyword in row.lower() for keyword in id_6):#(lf)        return 6#(lf)#(lf)    elif any(keyword in row.lower() for keyword in id_7):#(lf)        return 7#(lf)#(lf)    elif any(keyword in row.lower() for keyword in id_8):#(lf)        return 8#(lf)#(lf)    elif any(keyword in row.lower() for keyword in id_9):#(lf)        return 9#(lf)#(lf)    elif any(keyword in row.lower() for keyword in id_10):#(lf)        return 10#(lf)#(lf)    elif any(keyword in row.lower() for keyword in id_11):#(lf)        return 11#(lf)#(lf)    elif any(keyword in row.lower() for keyword in id_12):#(lf)        return 12#(lf)#(lf)    elif any(keyword in row.lower() for keyword in id_13):#(lf)        return 13#(lf)#(lf)    elif any(keyword in row.lower() for keyword in id_14):#(lf)        return 14#(lf)#(lf)    elif any(keyword in row.lower() for keyword in id_15):#(lf)        return 15#(lf)#(lf)    elif any(keyword in row.lower() for keyword in id_16):#(lf)        return 16#(lf)#(lf)    elif any(keyword in row.lower() for keyword in id_17):#(lf)        return 17#(lf)#(lf)    elif any(keyword in row.lower() for keyword in id_18):#(lf)        return 18#(lf)#(lf)    elif any(keyword in row.lower() for keyword in id_19):#(lf)        return 19#(lf)#(lf)    elif any(keyword in row.lower() for keyword in id_20):#(lf)        return 20#(lf)#(lf)    elif any(keyword in row.lower() for keyword in id_21):#(lf)        return 21#(lf)#(lf)    elif any(keyword in row.lower() for keyword in id_22):#(lf)        return 22#(lf)#(lf)    elif any(keyword in row.lower() for keyword in id_23):#(lf)        return 23#(lf)#(lf)    elif any(keyword in row.lower() for keyword in id_24):#(lf)        return 24#(lf)#(lf)    else:#(lf)        return 24#(lf)#(lf)#(lf)def emergency_cause_id(row):#(lf)    if pd.isna(row) or row == '':#(lf)        return#(lf)#(lf)    id_1 = [\"\"unknown\"\"]#(lf)    id_2 = ['physical attack', 'sabotage', 'actual physical event',#(lf)            'suspected physical attack', 'suspected sabotage', 'suspected telecommunications attack']#(lf)    id_3 = ['threat of physical', 'potential physical attack']#(lf)    id_4 = ['vandalsim', 'vandalism']#(lf)    id_5 = ['theft']#(lf)    id_6 = ['suspicious activity']#(lf)    id_7 = []#(lf)    id_8 = ['cyber']#(lf)    id_9 = [\"\"fuel supply\"\"]#(lf)    id_10 = ['generator', 'generation inadequacy']#(lf)    id_11 = ['transmission equipment', 'transmission  equipment', 'transmission system', 'transmission level',#(lf)             'equipment trip', 'equipment failure', 'equipment malfunction', 'equipment faulted', 'transformer failure']#(lf)    id_12 = [\"\"switch\"\", \"\"failure at high voltage substation\"\", 'substation']#(lf)    id_13 = ['weather', 'natural disaster', 'storm', 'lightning', 'wind', 'tornado', 'hurricane', 'heat wave', 'heatwave'#(lf)             'earthquake', 'earthquake', 'wildfire', 'brush fire', 'tropical', 'ice', 'flood', 'rain', 'wild fire', 'high winds', 'high temperatures', 'wild land fire']#(lf)    id_14 = [\"\"operator\"\"]#(lf)    id_15 = ['other']#(lf)#(lf)    if any(keyword in row.lower() for keyword in id_1):#(lf)        return 1#(lf)#(lf)    elif any(keyword in row.lower() for keyword in id_3):#(lf)        return 3#(lf)#(lf)    elif any(keyword in row.lower() for keyword in id_5):#(lf)        return 5#(lf)#(lf)    elif any(keyword in row.lower() for keyword in id_4):#(lf)        return 4#(lf)#(lf)    elif any(keyword in row.lower() for keyword in id_6):#(lf)        return 6#(lf)#(lf)    elif any(keyword in row.lower() for keyword in id_2):#(lf)        return 2#(lf)#(lf)    elif any(keyword in row.lower() for keyword in id_7):#(lf)        return 7#(lf)#(lf)    elif any(keyword in row.lower() for keyword in id_8):#(lf)        return 8#(lf)#(lf)    elif any(keyword in row.lower() for keyword in id_13):#(lf)        return 13#(lf)#(lf)    elif any(keyword in row.lower() for keyword in id_9):#(lf)        return 9#(lf)#(lf)    elif any(keyword in row.lower() for keyword in id_10):#(lf)        return 10#(lf)#(lf)    elif any(keyword in row.lower() for keyword in id_11):#(lf)        return 11#(lf)#(lf)    elif any(keyword in row.lower() for keyword in id_12):#(lf)        return 12#(lf)#(lf)    elif any(keyword in row.lower() for keyword in id_14):#(lf)        return 14#(lf)#(lf)    elif any(keyword in row.lower() for keyword in id_15):#(lf)        return 15#(lf)#(lf)    else:#(lf)        return 15#(lf)#(lf)#(lf)def emergency_impact_id(row):#(lf)    if pd.isna(row) or row == '':#(lf)        return 17#(lf)#(lf)    id_1 = ['none']#(lf)    id_2 = ['unplanned evacuation from its bulk electric system control center']#(lf)    id_3 = ['Complete loss of Interpersonal Communication and Alternative Interpersonal Communication capability',#(lf)            'complete loss of monitoring or control capability']#(lf)    id_4 = ['damage', 'destruction']#(lf)    id_5 = ['electrical system separation',#(lf)            'electric system separation', 'islanding', 'electrical separation']#(lf)    id_6 = ['complete operational failure',#(lf)            'complete operational failure or shut down of the transmission and/or distribution electrical system', 'complete electric system failure']#(lf)    id_7 = ['three or more BES elements']#(lf)    id_8 = ['major distribution system']#(lf)    id_9 = ['uncontrolled loss of 200 mw']#(lf)    id_10 = ['loss of electric service to more than 50,000 customers']#(lf)    id_11 = ['voltage reductions of 3 percent']#(lf)    id_12 = ['bulk electric system emergency resulting in voltage deviation',#(lf)             'voltage deviation equal to or greater than 10%']#(lf)    id_13 = ['inadequate electric resources to serve load']#(lf)    id_14 = ['capacity loss of 1,400 mw']#(lf)    id_15 = ['capacity loss of 2,000 mw']#(lf)    id_16 = ['nuclear generating']#(lf)    id_17 = ['other']#(lf)#(lf)    if any(keyword in row.lower() for keyword in id_1):#(lf)        return 1#(lf)#(lf)    elif any(keyword in row.lower() for keyword in id_2):#(lf)        return 2#(lf)#(lf)    elif any(keyword in row.lower() for keyword in id_3):#(lf)        return 3#(lf)#(lf)    elif any(keyword in row.lower() for keyword in id_4):#(lf)        return 4#(lf)#(lf)    elif any(keyword in row.lower() for keyword in id_5):#(lf)        return 5#(lf)#(lf)    elif any(keyword in row.lower() for keyword in id_6):#(lf)        return 6#(lf)#(lf)    elif any(keyword in row.lower() for keyword in id_7):#(lf)        return 7#(lf)#(lf)    elif any(keyword in row.lower() for keyword in id_8):#(lf)        return 8#(lf)#(lf)    elif any(keyword in row.lower() for keyword in id_9):#(lf)        return 9#(lf)#(lf)    elif any(keyword in row.lower() for keyword in id_10):#(lf)        return 10#(lf)#(lf)    elif any(keyword in row.lower() for keyword in id_11):#(lf)        return 11#(lf)#(lf)    elif any(keyword in row.lower() for keyword in id_12):#(lf)        return 12#(lf)#(lf)    elif any(keyword in row.lower() for keyword in id_13):#(lf)        return 13#(lf)#(lf)    elif any(keyword in row.lower() for keyword in id_14):#(lf)        return 14#(lf)#(lf)    elif any(keyword in row.lower() for keyword in id_15):#(lf)        return 15#(lf)#(lf)    elif any(keyword in row.lower() for keyword in id_16):#(lf)        return 16#(lf)#(lf)    elif any(keyword in row.lower() for keyword in id_17):#(lf)        return 17#(lf)#(lf)    else:#(lf)        return 17#(lf)#(lf)#(lf)def emergency_action_id(row):#(lf)    if pd.isna(row) or row == '':#(lf)        return 9#(lf)    id_1 = ['none']#(lf)    id_2 = ['load shedding of 100 megawatt',#(lf)            'load shed 100+', 'load shed of 100+', ]#(lf)    id_3 = ['public appeal to reduce']#(lf)    id_4 = ['warning', 'alert', 'contingency plan', 'implementation of stage 2 electrical emergency plan',#(lf)            'declaration of  transmission emergency', 'declared stage 1 electric emergency']#(lf)    id_5 = ['voltage reduction']#(lf)    id_6 = ['shed interruptible load',#(lf)            'interruptible load shed', '/interruptible load shed']#(lf)    id_7 = ['repaired', 'restored']#(lf)    id_8 = ['mitigation implemented',#(lf)            'initiated interruption of air conditioner']#(lf)    id_9 = ['other']#(lf)#(lf)    if any(keyword in row.lower() for keyword in id_1):#(lf)        return 1#(lf)#(lf)    elif any(keyword in row.lower() for keyword in id_2):#(lf)        return 2#(lf)#(lf)    elif any(keyword in row.lower() for keyword in id_3):#(lf)        return 3#(lf)#(lf)    elif any(keyword in row.lower() for keyword in id_4):#(lf)        return 4#(lf)#(lf)    elif any(keyword in row.lower() for keyword in id_5):#(lf)        return 5#(lf)#(lf)    elif any(keyword in row.lower() for keyword in id_6):#(lf)        return 6#(lf)#(lf)    elif any(keyword in row.lower() for keyword in id_7):#(lf)        return 7#(lf)#(lf)    elif any(keyword in row.lower() for keyword in id_8):#(lf)        return 8#(lf)#(lf)    elif any(keyword in row.lower() for keyword in id_9):#(lf)        return 9#(lf)#(lf)    else:#(lf)        return 9#(lf)#(lf)#(lf)def update_impact_id(row):#(lf)    if row['Impact ID'] == 17 and row['Report Type ID'] == 22:#(lf)        return 2#(lf)    elif row['Impact ID'] == 17 and (row['Report Type ID'] == 23 or row['Report Type ID'] == 24):#(lf)        return 3#(lf)    elif row['Impact ID'] == 17 and (row['Report Type ID'] == 13 or row['Report Type ID'] == 14):#(lf)        return 4#(lf)    elif row['Impact ID'] == 17 and row['Report Type ID'] == 4:#(lf)        return 5#(lf)    elif row['Impact ID'] == 17 and row['Report Type ID'] == 18:#(lf)        return 9#(lf)    elif row['Impact ID'] == 17 and row['Report Type ID'] == 11:#(lf)        return 10#(lf)    elif row['Impact ID'] == 17 and row['Report Type ID'] == 7:#(lf)        return 11#(lf)    elif row['Impact ID'] == 17 and row['Report Type ID'] == 17:#(lf)        return 12#(lf)    elif row['Impact ID'] == 17 and row['Report Type ID'] == 20:#(lf)        return 16#(lf)    else:#(lf)        return row['Impact ID']#(lf)#(lf)#(lf)def update_action_id(row):#(lf)    if row['Action ID'] == 9 and row['Report Type ID'] == 6:#(lf)        return 2#(lf)    elif row['Action ID'] == 9 and row['Report Type ID'] == 8:#(lf)        return 3#(lf)    elif row['Action ID'] == 9 and row['Report Type ID'] == 7:#(lf)        return 5#(lf)    else:#(lf)        return row['Action ID']#(lf)#(lf)#(lf)def replace_values(value):#(lf)    lower_value = str(value).lower().strip()#(lf)    if lower_value in [val.lower().strip() for val in values_to_replace]:#(lf)        return pd.NaT#(lf)    return value#(lf)#(lf)#(lf)def replace_string_to_zero(value):#(lf)    lower_value = str(value).lower()#(lf)    if lower_value in [val.lower() for val in strings_to_zero]:#(lf)        return 0#(lf)    return value#(lf)#(lf)#(lf)'''Cleaning sheets and concatenate data'''#(lf)#(lf)# Iterate through individual sheets in the Excel workbook#(lf)for sheet_name, sheet_data in wb.items():#(lf)#(lf)    # Find the index of the first row containing strings#(lf)    first_string_row = sheet_data[sheet_data.map(#(lf)        lambda x: isinstance(x, str)).all(axis=1)].index[0]#(lf)#(lf)    # Use the first string row as column names#(lf)    sheet_data.columns = sheet_data.iloc[first_string_row]#(lf)#(lf)    # Remove rows before the first column name row#(lf)    sheet_data = sheet_data.iloc[first_string_row + 1:]#(lf)#(lf)    # Rename column names#(lf)    for old_column, new_column in {#(lf)        'Date': 'Date Event Began',#(lf)        'Time': 'Time Event Began',#(lf)        'Restoration': 'Restoration Time',#(lf)        'Type of Disturbance': 'Event Type',#(lf)        'Loss (megawatts)': 'Demand Loss (MW)',#(lf)        'Number of Customers Affected 1[1]': 'Number of Customers Affected 1',#(lf)        'Area': 'Area Affected',#(lf)        ' NERC Region': 'NERC Region'#(lf)    }.items():#(lf)        if old_column in sheet_data.columns:#(lf)            sheet_data = sheet_data.rename(columns={old_column: new_column})#(lf)#(lf)   # Store the original data before filtering#(lf)    original_data = sheet_data.copy()#(lf)#(lf)    # Filter out all empty rows#(lf)    sheet_data = sheet_data.dropna(how='all')#(lf)#(lf)    # Filter out rows where date event began is NA#(lf)    sheet_data = sheet_data[~pd.isna(sheet_data['Date Event Began'])]#(lf)#(lf)   # Filter out rows with values to exclude using from date event began column#(lf)    sheet_data = sheet_data[sheet_data['Date Event Began'].apply(#(lf)        lambda x: all(val.lower() not in str(x).lower() for val in values_to_exclude))]#(lf)#(lf)    # Calculate what rows are filtered out and store it in data_removed dataframe#(lf)    removed_rows = original_data.merge(#(lf)        sheet_data, how='outer', indicator=True).loc[lambda x: x['_merge'] == 'left_only'].drop('_merge', axis=1)#(lf)#(lf)    data_removed = pd.concat([data_removed, removed_rows], ignore_index=True)#(lf)#(lf)    # Handle the sheets where the restoration date and time are in single column and split the column#(lf)    if 'Restoration Time' in sheet_data.columns:#(lf)#(lf)        # Clean rows with string and no date and time values to pd.NaT#(lf)        sheet_data['Restoration Time'] = sheet_data['Restoration Time'].apply(#(lf)            replace_values)#(lf)#(lf)        # Parse the datetime column to datetime dtype and check for errors#(lf)        sheet_data['Restoration Time'] = sheet_data['Restoration Time'].astype(#(lf)            str).apply(parse_datetime_string, show_errors=True)#(lf)#(lf)        # Split columns if all errors are solved#(lf)        sheet_data[['Date of Restoration', 'Time of Restoration']] = sheet_data['Restoration Time'].apply(#(lf)            lambda x: pd.Series(str(x).split(#(lf)                ' ', 1) if pd.notna(x) else [None, None])#(lf)        )#(lf)#(lf)    # Parse Date and time columns#(lf)#(lf)    # Clean rows with string and no date and time values to pd.NaT#(lf)    sheet_data['Date of Restoration'] = sheet_data['Date of Restoration'].apply(#(lf)        replace_values)#(lf)    sheet_data['Time of Restoration'] = sheet_data['Time of Restoration'].apply(#(lf)        replace_values)#(lf)#(lf)    # Parse date and time columns#(lf)    sheet_data[\"\"Date Event Began\"\"] = sheet_data[\"\"Date Event Began\"\"].astype(#(lf)        str).apply(parse_date_string, show_errors=True)#(lf)#(lf)    sheet_data[\"\"Time Event Began\"\"] = sheet_data[\"\"Time Event Began\"\"].astype(#(lf)        str).apply(parse_time_string, show_errors=True)#(lf)#(lf)    sheet_data[\"\"Date of Restoration\"\"] = sheet_data[\"\"Date of Restoration\"\"].astype(#(lf)        str).apply(parse_date_string, show_errors=True)#(lf)#(lf)    sheet_data['Time of Restoration'] = sheet_data['Time of Restoration'].astype(#(lf)        str).apply(parse_time_string, show_errors=True)#(lf)#(lf)    sheet_data[\"\"Date of Restoration\"\"] = pd.to_datetime(#(lf)        sheet_data[\"\"Date of Restoration\"\"])#(lf)#(lf)    # Concatenate the modified sheet data to the data dataframe#(lf)    data = pd.concat([data, sheet_data], ignore_index=True)#(lf)#(lf)#(lf)# Filter out unnecesary columns#(lf)data = data[['Date Event Began', 'Time Event Began', 'Date of Restoration',#(tab)'Time of Restoration',#(tab)'Area Affected',#(lf)             'NERC Region',#(tab)'Alert Criteria', 'Event Type', 'Demand Loss (MW)', 'Number of Customers Affected']]#(lf)#(lf)# Sorting dataset and resetting index#(lf)data.sort_values(by='Date Event Began', ascending=True, inplace=True)#(lf)data.reset_index(drop=True, inplace=True)#(lf)#(lf)# Storing data from >= 2015#(lf)data_from_2015 = data[data['Date Event Began'] >= '01-01-2015'].copy()#(lf)#(lf)# Cleaning NERC Region column#(lf)#(lf)data_from_2015[\"\"NERC Region\"\"] = data_from_2015[\"\"NERC Region\"\"].str.strip()#(lf)#(lf)nerc_values_replace = {#(lf)    \"\"RF\"\": \"\"RFC\"\",#(lf)    \"\"RE\"\": \"\"TRE\"\",#(lf)    \"\"FRCC\"\": \"\"SERC\"\",#(lf)    \"\"SPP RE\"\": \"\"SPP/TRE\"\",#(lf)    \"\"RF/SERC\"\": \"\"RFC/SERC\"\",#(lf)    \"\"SERC/RF\"\":  \"\"RFC/SERC\"\",#(lf)    \"\"SERC / RF\"\": \"\"RFC/SERC\"\",#(lf)    \"\"SERC/MRO\"\": \"\"MRO/SERC\"\",#(lf)    \"\"MRO/RF\"\": \"\"MRO/RFC\"\",#(lf)    \"\"MRO / RF\"\": \"\"MRO/RFC\"\",#(lf)    \"\"WECC/MRO\"\": \"\"MRO/WECC\"\",#(lf)    \"\"RF/MRO\"\": \"\"MRO/RFC\"\",#(lf)    \"\"SPP, SERC, TRE\"\": \"\"SPP/SERC/TRE\"\",#(lf)    \"\"WECC/SERC\"\": \"\"SERC/WECC\"\"#(lf)}#(lf)#(lf)data_from_2015[\"\"NERC Region\"\"] = data_from_2015[\"\"NERC Region\"\"].replace(#(lf)    nerc_values_replace)#(lf)#(lf)# Add HI and PR if NERC Region is NA#(lf)data_from_2015.loc[data_from_2015[\"\"NERC Region\"\"].isna() & data_from_2015[\"\"Area Affected\"\"].str.lower(#(lf)).str.contains(\"\"puerto rico\"\", case=False, na=False), \"\"NERC Region\"\"] = \"\"PR\"\"#(lf)data_from_2015.loc[data_from_2015[\"\"NERC Region\"\"].isna() & data_from_2015[\"\"Area Affected\"\"].str.lower(#(lf)).str.contains(\"\"hawaii\"\", case=False, na=False), \"\"NERC Region\"\"] = \"\"HI\"\"#(lf)#(lf)#(lf)# Parsing Alert Criteria and Event Type columns into seperate ID columns#(lf)#(lf)# Report Type ID#(lf)data_from_2015[\"\"Report Type ID\"\"] = data_from_2015[\"\"Alert Criteria\"\"].apply(#(lf)    report_type_id)#(lf)#(lf)# Emergency Cause ID#(lf)data_from_2015[\"\"Cause ID\"\"] = data_from_2015[\"\"Event Type\"\"].apply(#(lf)    emergency_cause_id)#(lf)#(lf)# Emergency Impact ID#(lf)data_from_2015[\"\"Impact ID\"\"] = data_from_2015[\"\"Event Type\"\"].apply(#(lf)    emergency_impact_id)#(lf)data_from_2015['Impact ID'] = data_from_2015.apply(update_impact_id, axis=1)#(lf)#(lf)# Emergency Action ID#(lf)data_from_2015[\"\"Action ID\"\"] = data_from_2015[\"\"Event Type\"\"].apply(#(lf)    emergency_action_id)#(lf)data_from_2015['Action ID'] = data_from_2015.apply(update_action_id, axis=1)#(lf)#(lf)# Replacing Unknown and NA values in Demand Loss (MW) and Number of Customers Affected#(lf)data_from_2015['Demand Loss (MW)'] = data_from_2015['Demand Loss (MW)'].replace(#(lf)    'Unknown', 0)#(lf)data_from_2015['Number of Customers Affected'] = data_from_2015['Number of Customers Affected'].replace(#(lf)    'Unknown', 0)#(lf)data_from_2015['Number of Customers Affected'] = data_from_2015['Number of Customers Affected'].replace(#(lf)    pd.NA, 0)#(lf)#(lf)# Adding column Outage Time in minutes#(lf)data_from_2015.loc[2525, 'Date of Restoration'] = pd.to_datetime('2019-08-18')#(lf)data_from_2015['Outage Time'] = (data_from_2015['Date of Restoration'] + pd.to_timedelta(data_from_2015['Time of Restoration'])#(lf)                                 ) - (data_from_2015['Date Event Began'] + pd.to_timedelta(data_from_2015['Time Event Began']))#(lf)data_from_2015['Outage Time'] = data_from_2015['Outage Time'].dt.total_seconds() / 60#(lf)#(lf)# Removing outliers and duplicates#(lf)data_from_2015[data_from_2015['Outage Time'] < 0]#(lf)#(lf)# Filter duplicate rows#(lf)indices_to_filter = [1691, 2037, 2062, 2063, 2134, 2147, 2409, 2575, 2590, 2602, 2673, 3051, 3069,#(lf)                     3070, 3096, 3227, 3299, 3312, 3377, 3377, 3378, 3473, 3475, 3507, 3518, 3601, 3624, 3640, 3858, 3859]#(lf)#(lf)data_from_2015 = data_from_2015.drop(indices_to_filter)#(lf)data_from_2015.loc[2039, 'NERC Region'] = \"\"SERC/TRE\"\"#(lf)#(lf)# Sort Data and add Event ID Column#(lf)data_from_2015.sort_values(by=['Date Event Began', 'Time Event Began'], inplace=True)#(lf)#(lf)data_from_2015.reset_index(inplace=True, drop=True)#(lf)data_from_2015.index += 1 #(lf)data_from_2015.reset_index(drop=False,inplace=True)#(lf)data_from_2015.rename(columns={'index': 'Event ID'}, inplace=True)        #(lf)#(lf)#(lf)data_from_2015#(lf)\"),",
+                "    Sheet1_Sheet = Source{[Name=\"data_from_2015\"]}[Value],",
+                "    #\"Replaced Value\" = Table.ReplaceValue(Sheet1_Sheet,\"NaT\",null,Replacer.ReplaceValue,{\"Date of Restoration\", \"Time of Restoration\"}),",
+                "    #\"Changed Type\" = Table.TransformColumnTypes(#\"Replaced Value\",{{\"Event ID\", Int64.Type}, {\"Date Event Began\", type date}, {\"Time Event Began\", type time}, {\"Date of Restoration\", type date}, {\"Time of Restoration\", type time}, {\"Area Affected\", type text}, {\"NERC Region\", type text}, {\"Alert Criteria\", type text}, {\"Event Type\", type text}, {\"Demand Loss (MW)\", Int64.Type}, {\"Number of Customers Affected\", Int64.Type}, {\"Report Type ID\", Int64.Type}, {\"Cause ID\", Int64.Type}, {\"Impact ID\", Int64.Type}, {\"Action ID\", Int64.Type}, {\"Outage Time\", Int64.Type}}),",
+                "    #\"Removed Columns\" = Table.RemoveColumns(#\"Changed Type\",{\"Alert Criteria\", \"Event Type\"})",
+                "in",
+                "    #\"Removed Columns\""
+              ],
+              "type": "m"
+            }
+          }
+        ]
+      },
+      {
+        "name": "NERC Region Bridge",
+        "annotations": [
+          {
+            "name": "PBI_NavigationStepName",
+            "value": "Navigation"
+          },
+          {
+            "name": "PBI_ResultType",
+            "value": "Table"
+          }
+        ],
+        "columns": [
+          {
+            "name": "NERC Region",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "changedProperties": [
+              {
+                "property": "IsHidden"
+              }
+            ],
+            "dataType": "string",
+            "isHidden": true,
+            "lineageTag": "b9c99628-2ab4-409b-a06b-73de8ebefb89",
+            "sourceColumn": "NERC Region",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "Event ID",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "User"
+              }
+            ],
+            "changedProperties": [
+              {
+                "property": "IsHidden"
+              }
+            ],
+            "dataType": "int64",
+            "formatString": "0",
+            "isHidden": true,
+            "lineageTag": "5bddb68d-00be-47de-bfae-71979c47eb64",
+            "sourceColumn": "Event ID",
+            "summarizeBy": "none"
+          }
+        ],
+        "lineageTag": "1cb6d200-bcbd-4dfc-991e-d861f61a92b2",
+        "partitions": [
+          {
+            "name": "NERC Region Bridge",
+            "mode": "import",
+            "queryGroup": "Support Tables",
+            "source": {
+              "expression": [
+                "let",
+                "    Source = Reports,",
+                "    #\"Removed Other Columns\" = Table.SelectColumns(Source,{\"NERC Region\", \"Event ID\"}),",
+                "    #\"Reordered Columns\" = Table.ReorderColumns(#\"Removed Other Columns\",{\"Event ID\", \"NERC Region\"}),",
+                "    #\"Split Column by Delimiter\" = Table.ExpandListColumn(Table.TransformColumns(#\"Reordered Columns\", {{\"NERC Region\", Splitter.SplitTextByDelimiter(\"/\", QuoteStyle.Csv), let itemType = (type nullable text) meta [Serialized.Text = true] in type {itemType}}}), \"NERC Region\"),",
+                "    #\"Changed Type\" = Table.TransformColumnTypes(#\"Split Column by Delimiter\",{{\"NERC Region\", type text}})",
+                "in",
+                "    #\"Changed Type\""
+              ],
+              "type": "m"
+            }
+          }
+        ]
+      },
+      {
+        "name": "Measurements",
+        "annotations": [
+          {
+            "name": "PBI_ResultType",
+            "value": "Table"
+          }
+        ],
+        "changedProperties": [
+          {
+            "property": "Name"
+          }
+        ],
+        "lineageTag": "7865d5d9-563c-40b8-a315-24d06dd896cc",
+        "measures": [
+          {
+            "name": "Incidents",
+            "description": "Calculate the total number of reported incidents based on count of Event ID's",
+            "displayFolder": "Reports",
+            "expression": "COUNT('Reports'[Event ID])",
+            "formatString": "#,0",
+            "lineageTag": "b34c1319-7a5e-41b8-b729-dd6d07cfe6b4"
+          },
+          {
+            "name": "Avg Outage Time (hours)",
+            "annotations": [
+              {
+                "name": "PBI_FormatHint",
+                "value": "{\"isGeneralNumber\":true}"
+              }
+            ],
+            "displayFolder": "Reports",
+            "expression": [
+              "",
+              "CALCULATE(",
+              "    AVERAGE('Reports'[Outage Time]) / 60,",
+              "    Reports[Outage Time] <> BLANK()",
+              ")"
+            ],
+            "lineageTag": "3689d19a-9127-4229-99b2-006c553f6935"
+          },
+          {
+            "name": "People Affected",
+            "displayFolder": "Reports",
+            "expression": "SUM('Reports'[Number of Customers Affected])",
+            "formatString": "0",
+            "lineageTag": "961a119a-84f3-4751-a50e-701197a0b510"
+          },
+          {
+            "name": "Demand Loss",
+            "displayFolder": "Reports",
+            "expression": "SUM('Reports'[Demand Loss (MW)])",
+            "formatString": "0",
+            "lineageTag": "98f42642-e737-4753-bb19-76597105e2d5"
+          },
+          {
+            "name": "Incidents LY",
+            "annotations": [
+              {
+                "name": "PBI_FormatHint",
+                "value": "{\"isGeneralNumber\":true}"
+              }
+            ],
+            "displayFolder": "Reports",
+            "expression": [
+              "",
+              "CALCULATE(",
+              "    [Incidents],",
+              "    'Time Intelligence'[Date Calculations] = \"LY\"",
+              "    )"
+            ],
+            "lineageTag": "c208132f-781d-48de-ba02-12d6cc0adf7f"
+          },
+          {
+            "name": "People Affected LY",
+            "annotations": [
+              {
+                "name": "PBI_FormatHint",
+                "value": "{\"isGeneralNumber\":true}"
+              }
+            ],
+            "displayFolder": "Reports",
+            "expression": [
+              "",
+              "CALCULATE(",
+              "    [People Affected],",
+              "    'Time Intelligence'[Date Calculations] = \"LY\"",
+              ")"
+            ],
+            "lineageTag": "91352e51-e419-4c20-a78d-783ceefd54d1"
+          },
+          {
+            "name": "Avg Outage Time LY",
+            "annotations": [
+              {
+                "name": "PBI_FormatHint",
+                "value": "{\"isGeneralNumber\":true}"
+              }
+            ],
+            "displayFolder": "Reports",
+            "expression": [
+              "",
+              "CALCULATE(",
+              "    [Avg Outage Time (hours)],",
+              "    'Time Intelligence'[Date Calculations] = \"LY\"",
+              ")"
+            ],
+            "lineageTag": "936890cf-746d-4889-9cb9-358d350e8a18"
+          },
+          {
+            "name": "Demand Loss LY",
+            "annotations": [
+              {
+                "name": "PBI_FormatHint",
+                "value": "{\"isGeneralNumber\":true}"
+              }
+            ],
+            "displayFolder": "Reports",
+            "expression": [
+              "",
+              "CALCULATE(",
+              "    [Demand Loss],",
+              "    'Time Intelligence'[Date Calculations] = \"LY\"",
+              ")"
+            ],
+            "lineageTag": "5b1b77c8-f12e-4263-9ba1-b33208b70f6d"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Measurements",
+            "mode": "import",
+            "source": {
+              "expression": [
+                "let",
+                "    Source = Table.FromRows(Json.Document(Binary.Decompress(Binary.FromText(\"i44FAA==\", BinaryEncoding.Base64), Compression.Deflate)), let _t = ((type nullable text) meta [Serialized.Text = true]) in type table [Column1 = _t]),",
+                "    #\"Changed Type\" = Table.TransformColumnTypes(Source,{{\"Column1\", type text}}),",
+                "    #\"Removed Columns\" = Table.RemoveColumns(#\"Changed Type\",{\"Column1\"})",
+                "in",
+                "    #\"Removed Columns\""
+              ],
+              "type": "m"
+            }
+          }
+        ]
+      },
+      {
+        "name": "Calendar",
+        "annotations": [
+          {
+            "name": "PBI_Id",
+            "value": "f668f53a4e4f4f9c99009fa78e757d02"
+          }
+        ],
+        "columns": [
+          {
+            "name": "Date",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "dateTime",
+            "formatString": "General Date",
+            "isDataTypeInferred": true,
+            "isKey": true,
+            "isNameInferred": true,
+            "lineageTag": "82846cee-feb0-4107-96c5-e45a08c0023b",
+            "sourceColumn": "[Date]",
+            "summarizeBy": "none",
+            "type": "calculatedTableColumn"
+          },
+          {
+            "name": "Year",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "User"
+              }
+            ],
+            "dataType": "int64",
+            "formatString": "0",
+            "isDataTypeInferred": true,
+            "isNameInferred": true,
+            "lineageTag": "6982644a-3fea-42fa-b0c4-13611c8b3989",
+            "sourceColumn": "[Year]",
+            "summarizeBy": "none",
+            "type": "calculatedTableColumn"
+          },
+          {
+            "name": "Month Name",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "string",
+            "isDataTypeInferred": true,
+            "isNameInferred": true,
+            "lineageTag": "001a7af7-06b8-4fd2-a27a-68ed12c3ea5f",
+            "sortByColumn": "Month",
+            "sourceColumn": "[Month Name]",
+            "summarizeBy": "none",
+            "type": "calculatedTableColumn"
+          },
+          {
+            "name": "Month",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "User"
+              }
+            ],
+            "dataType": "int64",
+            "formatString": "0",
+            "isDataTypeInferred": true,
+            "isNameInferred": true,
+            "lineageTag": "7e66399b-0fbd-48ec-be30-0f671c417960",
+            "sourceColumn": "[Month]",
+            "summarizeBy": "none",
+            "type": "calculatedTableColumn"
+          },
+          {
+            "name": "Quarter",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "User"
+              }
+            ],
+            "dataType": "int64",
+            "formatString": "0",
+            "isDataTypeInferred": true,
+            "isNameInferred": true,
+            "lineageTag": "fbfc273a-d163-46ed-add9-ad619fc84da1",
+            "sourceColumn": "[Quarter]",
+            "summarizeBy": "none",
+            "type": "calculatedTableColumn"
+          },
+          {
+            "name": "Quarter Name",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "string",
+            "isDataTypeInferred": true,
+            "isNameInferred": true,
+            "lineageTag": "890df9d8-d08c-4b0c-9781-9c578bad5628",
+            "sortByColumn": "Quarter",
+            "sourceColumn": "[Quarter Name]",
+            "summarizeBy": "none",
+            "type": "calculatedTableColumn"
+          },
+          {
+            "name": "Quarter Year",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "string",
+            "isDataTypeInferred": true,
+            "isNameInferred": true,
+            "lineageTag": "70dd327b-8689-4148-861e-2bddeced15a0",
+            "sortByColumn": "Quarter",
+            "sourceColumn": "[Quarter Year]",
+            "summarizeBy": "none",
+            "type": "calculatedTableColumn"
+          },
+          {
+            "name": "Month Year",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "string",
+            "isDataTypeInferred": true,
+            "isNameInferred": true,
+            "lineageTag": "d0c100b8-ee2f-46b9-b7cc-b363ec39f328",
+            "sourceColumn": "[Month Year]",
+            "summarizeBy": "none",
+            "type": "calculatedTableColumn"
+          }
+        ],
+        "dataCategory": "Time",
+        "lineageTag": "0c9b074c-6fcd-41fb-9795-bcf7ab2896dc",
+        "partitions": [
+          {
+            "name": "Calendar",
+            "mode": "import",
+            "source": {
+              "expression": [
+                "",
+                "VAR MinDate = STARTOFYEAR('Reports'[Date Event Began])",
+                "VAR MaxDate = MAX('Reports'[Date Event Began])",
+                "",
+                "RETURN",
+                "    ADDCOLUMNS(",
+                "        CALENDAR(MinDate, MaxDate),",
+                "        \"Year\", YEAR([Date]), ",
+                "        \"Quarter\", QUARTER([Date]),",
+                "        \"Quarter Name\", \"Q\" & CEILING(MONTH([Date]) / 3, 1),    ",
+                "        \"Quarter Year\", \"Q\" & CEILING(MONTH([Date]) / 3, 1) &\" \" & YEAR([Date]),",
+                "        \"Month\", MONTH([Date]),",
+                "        \"Month Name\", FORMAT([Date], \"MMMM\"),        ",
+                "        \"Month Year\", FORMAT([Date], \"MMMM YYYY\")",
+                "       ",
+                "    )"
+              ],
+              "type": "calculated"
+            }
+          }
+        ]
+      },
+      {
+        "name": "Alert Criteria",
+        "annotations": [
+          {
+            "name": "PBI_NavigationStepName",
+            "value": "Navigation"
+          },
+          {
+            "name": "PBI_ResultType",
+            "value": "Table"
+          }
+        ],
+        "columns": [
+          {
+            "name": "ID",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "User"
+              }
+            ],
+            "changedProperties": [
+              {
+                "property": "IsHidden"
+              }
+            ],
+            "dataType": "int64",
+            "formatString": "0",
+            "isHidden": true,
+            "lineageTag": "1ac4ca74-5555-419f-81d3-3ad19b4b5457",
+            "sourceColumn": "ID",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "Alert Criteria",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "string",
+            "lineageTag": "b6bddcbc-53e5-4552-ac5f-42fdad146a73",
+            "sourceColumn": "Alert Criteria",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "Report Type",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "string",
+            "lineageTag": "bc352773-debd-4858-ad31-da44dd6709c8",
+            "sourceColumn": "Report Type",
+            "summarizeBy": "none"
+          }
+        ],
+        "lineageTag": "36272524-40e4-444d-bd4c-30509bdf3dfd",
+        "partitions": [
+          {
+            "name": "Alert Criteria",
+            "mode": "import",
+            "queryGroup": "Dimensions",
+            "source": {
+              "expression": [
+                "let",
+                "    Source = Excel.Workbook(File.Contents(\"C:\\Users\\niels\\OneDrive\\7. Portfolio Data Analytics\\Challenges\\Maven Analytics - Power Outage\\Data\\events_criteria_tables.xlsx\"), null, true),",
+                "    #\"Alert Criteria_Sheet\" = Source{[Item=\"Alert Criteria\",Kind=\"Sheet\"]}[Data],",
+                "    #\"Promoted Headers\" = Table.PromoteHeaders(#\"Alert Criteria_Sheet\", [PromoteAllScalars=true]),",
+                "    #\"Changed Type\" = Table.TransformColumnTypes(#\"Promoted Headers\",{{\"ID\", Int64.Type}, {\"Alert Criteria\", type text}, {\"Report Type\", type text}})",
+                "in",
+                "    #\"Changed Type\""
+              ],
+              "type": "m"
+            }
+          }
+        ]
+      },
+      {
+        "name": "Emergency Causes",
+        "annotations": [
+          {
+            "name": "PBI_NavigationStepName",
+            "value": "Navigation"
+          },
+          {
+            "name": "PBI_ResultType",
+            "value": "Table"
+          }
+        ],
+        "columns": [
+          {
+            "name": "ID",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "User"
+              }
+            ],
+            "changedProperties": [
+              {
+                "property": "IsHidden"
+              }
+            ],
+            "dataType": "int64",
+            "formatString": "0",
+            "isHidden": true,
+            "lineageTag": "b95a8384-f2c0-4c7c-b8c7-36454c5ea133",
+            "sourceColumn": "ID",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "Cause",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "string",
+            "lineageTag": "03887218-c7b4-4253-b689-1e14ab335ef6",
+            "sourceColumn": "Cause",
+            "summarizeBy": "none"
+          }
+        ],
+        "lineageTag": "1801901d-a4ad-4298-b6a7-15da1d573eae",
+        "partitions": [
+          {
+            "name": "Emergency Causes",
+            "mode": "import",
+            "queryGroup": "Dimensions",
+            "source": {
+              "expression": [
+                "let",
+                "    Source = Excel.Workbook(File.Contents(\"C:\\Users\\niels\\OneDrive\\7. Portfolio Data Analytics\\Challenges\\Maven Analytics - Power Outage\\Data\\events_criteria_tables.xlsx\"), null, true),",
+                "    #\"J. Cause_Sheet\" = Source{[Item=\"J. Cause\",Kind=\"Sheet\"]}[Data],",
+                "    #\"Promoted Headers1\" = Table.PromoteHeaders(#\"J. Cause_Sheet\", [PromoteAllScalars=true]),",
+                "    #\"Changed Type\" = Table.TransformColumnTypes(#\"Promoted Headers1\",{{\"ID\", Int64.Type}, {\"Cause\", type text}})",
+                "in",
+                "    #\"Changed Type\""
+              ],
+              "type": "m"
+            }
+          }
+        ]
+      },
+      {
+        "name": "Emergency Impacts",
+        "annotations": [
+          {
+            "name": "PBI_NavigationStepName",
+            "value": "Navigation"
+          },
+          {
+            "name": "PBI_ResultType",
+            "value": "Table"
+          }
+        ],
+        "columns": [
+          {
+            "name": "ID",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "User"
+              }
+            ],
+            "changedProperties": [
+              {
+                "property": "IsHidden"
+              }
+            ],
+            "dataType": "int64",
+            "formatString": "0",
+            "isHidden": true,
+            "lineageTag": "3bf36d8b-5a11-469c-a058-c577733d30e3",
+            "sourceColumn": "ID",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "Impact",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "string",
+            "lineageTag": "995801af-e13b-4f64-bedf-82816d61c091",
+            "sourceColumn": "Impact",
+            "summarizeBy": "none"
+          }
+        ],
+        "lineageTag": "53afb2a9-56b4-4eec-9361-f505a7bcab81",
+        "partitions": [
+          {
+            "name": "Emergency Impacts",
+            "mode": "import",
+            "queryGroup": "Dimensions",
+            "source": {
+              "expression": [
+                "let",
+                "    Source = Excel.Workbook(File.Contents(\"C:\\Users\\niels\\OneDrive\\7. Portfolio Data Analytics\\Challenges\\Maven Analytics - Power Outage\\Data\\events_criteria_tables.xlsx\"), null, true),",
+                "    #\"K. Impact_Sheet\" = Source{[Item=\"K. Impact\",Kind=\"Sheet\"]}[Data],",
+                "    #\"Promoted Headers\" = Table.PromoteHeaders(#\"K. Impact_Sheet\", [PromoteAllScalars=true]),",
+                "    #\"Changed Type\" = Table.TransformColumnTypes(#\"Promoted Headers\",{{\"ID\", Int64.Type}, {\"Impact\", type text}})",
+                "in",
+                "    #\"Changed Type\""
+              ],
+              "type": "m"
+            }
+          }
+        ]
+      },
+      {
+        "name": "Emergency Actions",
+        "annotations": [
+          {
+            "name": "PBI_NavigationStepName",
+            "value": "Navigation"
+          },
+          {
+            "name": "PBI_ResultType",
+            "value": "Table"
+          }
+        ],
+        "columns": [
+          {
+            "name": "ID",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "User"
+              }
+            ],
+            "changedProperties": [
+              {
+                "property": "IsHidden"
+              }
+            ],
+            "dataType": "int64",
+            "formatString": "0",
+            "isHidden": true,
+            "lineageTag": "f05efdc9-22b5-4e4e-97b3-028871875f88",
+            "sourceColumn": "ID",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "Action Taken",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "string",
+            "lineageTag": "140ce3b0-30e2-439e-950f-fe91f6a033a0",
+            "sourceColumn": "Action Taken",
+            "summarizeBy": "none"
+          }
+        ],
+        "lineageTag": "a5db0ac9-ba52-4cfc-8dde-b7bee15723e2",
+        "partitions": [
+          {
+            "name": "Emergency Actions",
+            "mode": "import",
+            "queryGroup": "Dimensions",
+            "source": {
+              "expression": [
+                "let",
+                "    Source = Excel.Workbook(File.Contents(\"C:\\Users\\niels\\OneDrive\\7. Portfolio Data Analytics\\Challenges\\Maven Analytics - Power Outage\\Data\\events_criteria_tables.xlsx\"), null, true),",
+                "    #\"L. Action Taken_Sheet\" = Source{[Item=\"L. Action Taken\",Kind=\"Sheet\"]}[Data],",
+                "    #\"Promoted Headers\" = Table.PromoteHeaders(#\"L. Action Taken_Sheet\", [PromoteAllScalars=true]),",
+                "    #\"Changed Type\" = Table.TransformColumnTypes(#\"Promoted Headers\",{{\"ID\", Int64.Type}, {\"Action Taken\", type text}})",
+                "in",
+                "    #\"Changed Type\""
+              ],
+              "type": "m"
+            }
+          }
+        ]
+      },
+      {
+        "name": "Time Intelligence",
+        "calculationGroup": {
+          "calculationItems": [
+            {
+              "name": "CY",
+              "expression": "SELECTEDMEASURE()",
+              "formatStringDefinition": {
+                "expression": "\"#,###\""
+              }
+            },
+            {
+              "name": "LY",
+              "expression": [
+                "",
+                "CALCULATE(",
+                "    SELECTEDMEASURE(),",
+                "    DATEADD( 'Calendar'[Date],-1,YEAR)",
+                ")"
+              ]
+            },
+            {
+              "name": "YoY",
+              "expression": [
+                "",
+                "VAR CY = SELECTEDMEASURE() ",
+                "VAR LY = CALCULATE(",
+                "            SELECTEDMEASURE() , ",
+                "            DATEADD( 'Calendar'[Date],-1,YEAR)",
+                "        )",
+                "",
+                "RETURN",
+                "    CY - LY",
+                "",
+                "",
+                ""
+              ]
+            },
+            {
+              "name": "YoY %",
+              "expression": [
+                "",
+                "VAR CY = SELECTEDMEASURE() ",
+                "VAR LY = CALCULATE(",
+                "            SELECTEDMEASURE(), ",
+                "            DATEADD( 'Calendar'[Date],-1,YEAR)",
+                "        )",
+                "",
+                "RETURN",
+                "    (CY - LY) / LY"
+              ],
+              "formatStringDefinition": {
+                "expression": "\"0.0%\""
+              }
+            }
+          ]
+        },
+        "columns": [
+          {
+            "name": "Date Calculations",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "string",
+            "lineageTag": "f7dec5b8-4b2d-4914-9aa4-dce4d785853e",
+            "sortByColumn": "Ordinal",
+            "sourceColumn": "Name",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "Ordinal",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "int64",
+            "formatString": "0",
+            "lineageTag": "96720faa-f811-4bb7-b1da-db683a85a86c",
+            "sourceColumn": "Ordinal",
+            "summarizeBy": "sum"
+          }
+        ],
+        "lineageTag": "ec6345b1-1c24-4a3e-8b1f-7a2c5730774d",
+        "partitions": [
+          {
+            "name": "Time Intelligence",
+            "mode": "import",
+            "source": {
+              "type": "calculationGroup"
+            }
+          }
+        ]
+      },
+      {
+        "name": "Filtered Rows",
+        "annotations": [
+          {
+            "name": "PBI_NavigationStepName",
+            "value": "Navigation"
+          },
+          {
+            "name": "PBI_ResultType",
+            "value": "Table"
+          }
+        ],
+        "columns": [
+          {
+            "name": "Date Event Began",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "string",
+            "lineageTag": "e681397f-eb7f-42ff-b57a-8fd0b50830f6",
+            "sourceColumn": "Date Event Began",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "NERC Region",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "string",
+            "lineageTag": "047de12c-de50-433d-a695-c6b26aad1bb6",
+            "sourceColumn": "NERC Region",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "Time Event Began",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "string",
+            "lineageTag": "d5090de3-2b58-44b1-a2b8-b54f3c2f82ef",
+            "sourceColumn": "Time Event Began",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "Area Affected",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "string",
+            "lineageTag": "df6abef9-5e52-4ff5-8510-cea986d529af",
+            "sourceColumn": "Area Affected",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "Event Type",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "string",
+            "lineageTag": "b99cf19d-ec64-4318-a63e-5f93b9294d59",
+            "sourceColumn": "Event Type",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "Demand Loss (MW)",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "string",
+            "lineageTag": "6aaa855c-9739-4a24-8cb4-3dbafac97de8",
+            "sourceColumn": "Demand Loss (MW)",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "Number of Customers Affected",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "string",
+            "lineageTag": "dce20d08-d6f6-4e66-b8bc-f0a5c5818516",
+            "sourceColumn": "Number of Customers Affected",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "Restoration Time",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "string",
+            "lineageTag": "b7b6bec6-9fbd-4e3d-9be5-98b3c0db0f30",
+            "sourceColumn": "Restoration Time",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "Number of Customers Affected 1",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "string",
+            "lineageTag": "45d7d0aa-0f58-4ae3-b6c4-ea3656f67823",
+            "sourceColumn": "Number of Customers Affected 1",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "Date of Restoration",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "string",
+            "lineageTag": "631b85b8-5b4f-4008-90b5-fae948734152",
+            "sourceColumn": "Date of Restoration",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "Time of Restoration",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "string",
+            "lineageTag": "d67ee401-4ad2-4c52-b699-ac46e8d8d744",
+            "sourceColumn": "Time of Restoration",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "Month",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "string",
+            "lineageTag": "b7b4f6c0-77ed-451d-b499-bc50e7233ea0",
+            "sourceColumn": "Month",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "Alert Criteria",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "string",
+            "lineageTag": "4819e63d-f4c2-4687-b00a-97bf8045df59",
+            "sourceColumn": "Alert Criteria",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "Event Year",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "string",
+            "lineageTag": "5cfd13f9-96b0-43cb-8ec6-dce2df8a2af8",
+            "sourceColumn": "Event Year",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "Event Month",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "string",
+            "lineageTag": "92863fa2-0520-4483-8da8-67cc8d520f94",
+            "sourceColumn": "Event Month",
+            "summarizeBy": "none"
+          }
+        ],
+        "lineageTag": "297b7939-52be-4762-88cc-44bd3c6d6013",
+        "partitions": [
+          {
+            "name": "Filtered Rows",
+            "mode": "import",
+            "queryGroup": "Facts",
+            "source": {
+              "expression": [
+                "let",
+                "    Source = Python.Execute(\"import pandas as pd#(lf)import seaborn as sns#(lf)import geopandas as gpd#(lf)#(lf)from dateutil import parser#(lf)#(lf)# Import dataset#(lf)path = r'C:\\Users\\niels\\OneDrive\\7. Portfolio Data Analytics\\Challenges\\Maven Analytics - Power Outage\\Data\\DOE_Electric_Disturbance_Events.xlsx'#(lf)wb = pd.read_excel(path, sheet_name=None)#(lf)#(lf)# Prepare dataframes#(lf)data = pd.DataFrame()#(lf)data_removed = pd.DataFrame()#(lf)#(lf)# Lists for cleaning data#(lf)#(lf)# List of values for filtering \"\"Date Event Began\"\" column#(lf)values_to_exclude = ['january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october',#(lf)                     'november', 'december', 'none', 'table b.2.', 'date', 'date/time', 'date event began', 'ongoing', 'na', 'note', 'continued', 'estimated', 'source', 'http', 'information']#(lf)#(lf)# Values to format#(lf)values_to_replace = ['ongoing', 'unknown',#(lf)                     'unknown ', 'unkonwn', 'none', 'nan', 'NaT']#(lf)#(lf)# Values to 0#(lf)strings_to_zero = ['unknown']#(lf)#(lf)#(lf)'''Functions'''#(lf)#(lf)# Functions for cleaning and convert date, time and datetime values#(lf)#(lf)# Parsing time strings#(lf)#(lf)#(lf)def parse_time_string(time_string, show_errors=False):#(lf)    if pd.notna(time_string):#(lf)        original_value = time_string#(lf)#(lf)        # Remove incorrect string values before parsing#(lf)        try:#(lf)            time_string = time_string.lower().replace(',', ' ')#(lf)            time_string = time_string.lower().replace(': ', ':')#(lf)            time_string = time_string.lower().replace('noon', 'p.m.')#(lf)            time_string = time_string.lower().replace('unknown', '')#(lf)            time_string = time_string.lower().replace('12:00 midnight', '00:00')#(lf)            time_string = time_string.lower().replace('midnight', '00:00')#(lf)            time_string = time_string.lower().replace('evening', '5 p.m.')#(lf)            time_string = time_string.lower().replace('ongoing', ' ')#(lf)            time_string = time_string.lower().replace('approximately', '')#(lf)            time_string = time_string.lower().replace('approximately ', '')#(lf)#(lf)            # Parse time with parser#(lf)            parsed_time = parser.parse(time_string)#(lf)            formatted_time = parsed_time.strftime('%H:%M:%S')#(lf)#(lf)            return formatted_time#(lf)        except ValueError as e:#(lf)            try:#(lf)                # If parser gives an error, try pd.to_datetime() or print error#(lf)                numeric_time = pd.to_numeric(#(lf)                    original_value, errors='coerce') * 24 * 3600#(lf)                formatted_time = pd.to_datetime(#(lf)                    numeric_time, unit='s', errors='coerce').time()#(lf)#(lf)                return formatted_time#(lf)#(lf)            except ValueError as e:#(lf)                # If both approaches fail, print the error for checking and keep original value#(lf)                if show_errors and time_string != 'NaN' and time_string != 'nan' and time_string != 'nat':#(lf)                    print(f\"\"Error parsing time string '{time_string}': {e}\"\")#(lf)                return original_value#(lf)#(lf)    else:#(lf)        return pd.NaT#(lf)#(lf)# Parsing datetime strings#(lf)#(lf)#(lf)def parse_datetime_string(datetime_string, show_errors=False):#(lf)    if pd.notna(datetime_string):#(lf)        original_value = datetime_string#(lf)#(lf)        # Remove incorrect string values before parsing#(lf)        try:#(lf)            datetime_string = datetime_string.lower().replace(',', ' ')#(lf)            datetime_string = datetime_string.lower().replace(': ', ':')#(lf)            datetime_string = datetime_string.lower().replace('noon', 'p.m.')#(lf)            datetime_string = datetime_string.lower().replace('midnight', 'a.m.')#(lf)            datetime_string = datetime_string.lower().replace('unknown', '')#(lf)            datetime_string = datetime_string.lower().replace('ongoing', '')#(lf)            datetime_string = datetime_string.lower().replace('12:00 midnight', '00:00')#(lf)            datetime_string = datetime_string.lower().replace('approximately', '')#(lf)            datetime_string = datetime_string.lower().replace('approximately ', '')#(lf)            datetime_string = datetime_string.lower().replace('(trans. only)', '')#(lf)#(lf)            # Parse time with parser#(lf)            parsed_datetime = parser.parse(datetime_string)#(lf)            formatted_datetime = parsed_datetime.strftime('%Y-%m-%d %H:%M:%S')#(lf)#(lf)            return pd.to_datetime(formatted_datetime)#(lf)#(lf)        # Print error#(lf)        except ValueError as e:#(lf)            if show_errors and datetime_string != 'nan' and datetime_string != 'NaT' and datetime_string != 'nat':#(lf)                print(#(lf)                    f\"\"Error parsing datetime string '{datetime_string}': {e}\"\")#(lf)            return original_value#(lf)#(lf)    else:#(lf)        return pd.NaT#(lf)#(lf)# Parsing date strings#(lf)#(lf)#(lf)def parse_date_string(date_string, show_errors=False):#(lf)    if pd.notna(date_string):#(lf)        original_value = date_string#(lf)#(lf)        # Remove incorrect string values before parsing#(lf)        try:#(lf)            date_string = date_string.lower().replace(',', ' ')#(lf)            date_string = date_string.lower().replace(': ', ':')#(lf)            date_string = date_string.lower().replace('//', '/')#(lf)            date_string = date_string.lower().replace('unknown', '')#(lf)            date_string = date_string.lower().replace('44641', '31-03-2022')#(lf)#(lf)            # Parse time with parser#(lf)            parsed_date = parser.parse(date_string)#(lf)            formatted_date = parsed_date.strftime('%Y-%m-%d')#(lf)#(lf)            return pd.to_datetime(formatted_date)#(lf)#(lf)        # Print error#(lf)        except ValueError as e:#(lf)            if show_errors and date_string != 'NaT' and date_string != 'nat' and date_string != 'nan':#(lf)                print(f\"\"Error parsing date string '{date_string}': {e}\"\")#(lf)#(lf)            return original_value#(lf)    else:#(lf)        return pd.NaT#(lf)#(lf)# Functions for parsing Alert Criteria and Event Type column#(lf)#(lf)#(lf)def report_type_id(row):#(lf)    if pd.isna(row) or row == '':#(lf)        return None#(lf)#(lf)    id_1 = ['physical attack that causes major interruptions or impacts']#(lf)    id_2 = ['cyber event that causes interruptions',#(lf)            'reportable cyber security incident']#(lf)    id_3 = ['complete operational failure']#(lf)    id_4 = ['islanding']#(lf)    id_5 = ['uncontrolled loss of 300 megawatts or more of firm system loads']#(lf)    id_6 = ['firm load shedding of 100 megawatts',#(lf)            'load shedding of 100 megawatts or more', 'load shed 100']#(lf)    id_7 = ['voltage reductions of 3 percent', 'voltage reduction']#(lf)    id_8 = ['public appeal to reduce']#(lf)    id_9 = ['physical attack that could potentially impact electric power system',#(lf)            'actual physical attack']#(lf)    id_10 = ['cyber event that could potentially impact electric power system',#(lf)             'cyber security incident that was an attempt to compromise', 'suspected cyber attack']#(lf)    id_11 = ['loss of electric service to more than 50,000 customers']#(lf)    id_12 = ['fuel supply emergencies that could impact electric power system']#(lf)    id_13 = ['damage or destruction of a facility within its reliability coordinator']#(lf)    id_14 = ['damage or destruction of its facility that results from actual or suspected intentional human action',#(lf)             'suspected physical attack']#(lf)    id_15 = [#(lf)        'physical threat to its facility excluding weather or natural disaster related threats']#(lf)    id_16 = [#(lf)        'physical threat to its bulk electric system control center, excluding weather']#(lf)    id_17 = ['bulk electric system emergency resulting in voltage deviation',#(lf)             'voltage deviation equal to or greater than 10%']#(lf)    id_18 = [#(lf)        'uncontrolled loss of 200 megawatts or more of firm system loads for 15 minutes or more']#(lf)    id_19 = [#(lf)        'total generation loss, within one minute of: greater than or equal to 2,000 megawatts']#(lf)    id_20 = ['affecting a nuclear generating station']#(lf)    id_21 = ['unexpected transmission loss within its area, contrary to design, of three or more bulk electric system facilities']#(lf)    id_22 = ['unplanned evacuation']#(lf)    id_23 = [#(lf)        'complete loss of interpersonal communication and alternative interpersonal communication']#(lf)    id_24 = ['loss of monitoring or control']#(lf)#(lf)    if any(keyword in row.lower() for keyword in id_1):#(lf)        return 1#(lf)#(lf)    elif any(keyword in row.lower() for keyword in id_2):#(lf)        return 2#(lf)#(lf)    elif any(keyword in row.lower() for keyword in id_3):#(lf)        return 3#(lf)#(lf)    elif any(keyword in row.lower() for keyword in id_4):#(lf)        return 4#(lf)#(lf)    elif any(keyword in row.lower() for keyword in id_5):#(lf)        return 5#(lf)#(lf)    elif any(keyword in row.lower() for keyword in id_6):#(lf)        return 6#(lf)#(lf)    elif any(keyword in row.lower() for keyword in id_7):#(lf)        return 7#(lf)#(lf)    elif any(keyword in row.lower() for keyword in id_8):#(lf)        return 8#(lf)#(lf)    elif any(keyword in row.lower() for keyword in id_9):#(lf)        return 9#(lf)#(lf)    elif any(keyword in row.lower() for keyword in id_10):#(lf)        return 10#(lf)#(lf)    elif any(keyword in row.lower() for keyword in id_11):#(lf)        return 11#(lf)#(lf)    elif any(keyword in row.lower() for keyword in id_12):#(lf)        return 12#(lf)#(lf)    elif any(keyword in row.lower() for keyword in id_13):#(lf)        return 13#(lf)#(lf)    elif any(keyword in row.lower() for keyword in id_14):#(lf)        return 14#(lf)#(lf)    elif any(keyword in row.lower() for keyword in id_15):#(lf)        return 15#(lf)#(lf)    elif any(keyword in row.lower() for keyword in id_16):#(lf)        return 16#(lf)#(lf)    elif any(keyword in row.lower() for keyword in id_17):#(lf)        return 17#(lf)#(lf)    elif any(keyword in row.lower() for keyword in id_18):#(lf)        return 18#(lf)#(lf)    elif any(keyword in row.lower() for keyword in id_19):#(lf)        return 19#(lf)#(lf)    elif any(keyword in row.lower() for keyword in id_20):#(lf)        return 20#(lf)#(lf)    elif any(keyword in row.lower() for keyword in id_21):#(lf)        return 21#(lf)#(lf)    elif any(keyword in row.lower() for keyword in id_22):#(lf)        return 22#(lf)#(lf)    elif any(keyword in row.lower() for keyword in id_23):#(lf)        return 23#(lf)#(lf)    elif any(keyword in row.lower() for keyword in id_24):#(lf)        return 24#(lf)#(lf)    else:#(lf)        return 24#(lf)#(lf)#(lf)def emergency_cause_id(row):#(lf)    if pd.isna(row) or row == '':#(lf)        return#(lf)#(lf)    id_1 = [\"\"unknown\"\"]#(lf)    id_2 = ['physical attack', 'sabotage', 'actual physical event',#(lf)            'suspected physical attack', 'suspected sabotage', 'suspected telecommunications attack']#(lf)    id_3 = ['threat of physical', 'potential physical attack']#(lf)    id_4 = ['vandalsim', 'vandalism']#(lf)    id_5 = ['theft']#(lf)    id_6 = ['suspicious activity']#(lf)    id_7 = []#(lf)    id_8 = ['cyber']#(lf)    id_9 = [\"\"fuel supply\"\"]#(lf)    id_10 = ['generator', 'generation inadequacy']#(lf)    id_11 = ['transmission equipment', 'transmission  equipment', 'transmission system', 'transmission level',#(lf)             'equipment trip', 'equipment failure', 'equipment malfunction', 'equipment faulted', 'transformer failure']#(lf)    id_12 = [\"\"switch\"\", \"\"failure at high voltage substation\"\", 'substation']#(lf)    id_13 = ['weather', 'natural disaster', 'storm', 'lightning', 'wind', 'tornado', 'hurricane', 'heat wave', 'heatwave'#(lf)             'earthquake', 'earthquake', 'wildfire', 'brush fire', 'tropical', 'ice', 'flood', 'rain', 'wild fire', 'high winds', 'high temperatures', 'wild land fire']#(lf)    id_14 = [\"\"operator\"\"]#(lf)    id_15 = ['other']#(lf)#(lf)    if any(keyword in row.lower() for keyword in id_1):#(lf)        return 1#(lf)#(lf)    elif any(keyword in row.lower() for keyword in id_3):#(lf)        return 3#(lf)#(lf)    elif any(keyword in row.lower() for keyword in id_5):#(lf)        return 5#(lf)#(lf)    elif any(keyword in row.lower() for keyword in id_4):#(lf)        return 4#(lf)#(lf)    elif any(keyword in row.lower() for keyword in id_6):#(lf)        return 6#(lf)#(lf)    elif any(keyword in row.lower() for keyword in id_2):#(lf)        return 2#(lf)#(lf)    elif any(keyword in row.lower() for keyword in id_7):#(lf)        return 7#(lf)#(lf)    elif any(keyword in row.lower() for keyword in id_8):#(lf)        return 8#(lf)#(lf)    elif any(keyword in row.lower() for keyword in id_13):#(lf)        return 13#(lf)#(lf)    elif any(keyword in row.lower() for keyword in id_9):#(lf)        return 9#(lf)#(lf)    elif any(keyword in row.lower() for keyword in id_10):#(lf)        return 10#(lf)#(lf)    elif any(keyword in row.lower() for keyword in id_11):#(lf)        return 11#(lf)#(lf)    elif any(keyword in row.lower() for keyword in id_12):#(lf)        return 12#(lf)#(lf)    elif any(keyword in row.lower() for keyword in id_14):#(lf)        return 14#(lf)#(lf)    elif any(keyword in row.lower() for keyword in id_15):#(lf)        return 15#(lf)#(lf)    else:#(lf)        return 15#(lf)#(lf)#(lf)def emergency_impact_id(row):#(lf)    if pd.isna(row) or row == '':#(lf)        return 17#(lf)#(lf)    id_1 = ['none']#(lf)    id_2 = ['unplanned evacuation from its bulk electric system control center']#(lf)    id_3 = ['Complete loss of Interpersonal Communication and Alternative Interpersonal Communication capability',#(lf)            'complete loss of monitoring or control capability']#(lf)    id_4 = ['damage', 'destruction']#(lf)    id_5 = ['electrical system separation',#(lf)            'electric system separation', 'islanding', 'electrical separation']#(lf)    id_6 = ['complete operational failure',#(lf)            'complete operational failure or shut down of the transmission and/or distribution electrical system', 'complete electric system failure']#(lf)    id_7 = ['three or more BES elements']#(lf)    id_8 = ['major distribution system']#(lf)    id_9 = ['uncontrolled loss of 200 mw']#(lf)    id_10 = ['loss of electric service to more than 50,000 customers']#(lf)    id_11 = ['voltage reductions of 3 percent']#(lf)    id_12 = ['bulk electric system emergency resulting in voltage deviation',#(lf)             'voltage deviation equal to or greater than 10%']#(lf)    id_13 = ['inadequate electric resources to serve load']#(lf)    id_14 = ['capacity loss of 1,400 mw']#(lf)    id_15 = ['capacity loss of 2,000 mw']#(lf)    id_16 = ['nuclear generating']#(lf)    id_17 = ['other']#(lf)#(lf)    if any(keyword in row.lower() for keyword in id_1):#(lf)        return 1#(lf)#(lf)    elif any(keyword in row.lower() for keyword in id_2):#(lf)        return 2#(lf)#(lf)    elif any(keyword in row.lower() for keyword in id_3):#(lf)        return 3#(lf)#(lf)    elif any(keyword in row.lower() for keyword in id_4):#(lf)        return 4#(lf)#(lf)    elif any(keyword in row.lower() for keyword in id_5):#(lf)        return 5#(lf)#(lf)    elif any(keyword in row.lower() for keyword in id_6):#(lf)        return 6#(lf)#(lf)    elif any(keyword in row.lower() for keyword in id_7):#(lf)        return 7#(lf)#(lf)    elif any(keyword in row.lower() for keyword in id_8):#(lf)        return 8#(lf)#(lf)    elif any(keyword in row.lower() for keyword in id_9):#(lf)        return 9#(lf)#(lf)    elif any(keyword in row.lower() for keyword in id_10):#(lf)        return 10#(lf)#(lf)    elif any(keyword in row.lower() for keyword in id_11):#(lf)        return 11#(lf)#(lf)    elif any(keyword in row.lower() for keyword in id_12):#(lf)        return 12#(lf)#(lf)    elif any(keyword in row.lower() for keyword in id_13):#(lf)        return 13#(lf)#(lf)    elif any(keyword in row.lower() for keyword in id_14):#(lf)        return 14#(lf)#(lf)    elif any(keyword in row.lower() for keyword in id_15):#(lf)        return 15#(lf)#(lf)    elif any(keyword in row.lower() for keyword in id_16):#(lf)        return 16#(lf)#(lf)    elif any(keyword in row.lower() for keyword in id_17):#(lf)        return 17#(lf)#(lf)    else:#(lf)        return 17#(lf)#(lf)#(lf)def emergency_action_id(row):#(lf)    if pd.isna(row) or row == '':#(lf)        return 9#(lf)    id_1 = ['none']#(lf)    id_2 = ['load shedding of 100 megawatt',#(lf)            'load shed 100+', 'load shed of 100+', ]#(lf)    id_3 = ['public appeal to reduce']#(lf)    id_4 = ['warning', 'alert', 'contingency plan', 'implementation of stage 2 electrical emergency plan',#(lf)            'declaration of  transmission emergency', 'declared stage 1 electric emergency']#(lf)    id_5 = ['voltage reduction']#(lf)    id_6 = ['shed interruptible load',#(lf)            'interruptible load shed', '/interruptible load shed']#(lf)    id_7 = ['repaired', 'restored']#(lf)    id_8 = ['mitigation implemented',#(lf)            'initiated interruption of air conditioner']#(lf)    id_9 = ['other']#(lf)#(lf)    if any(keyword in row.lower() for keyword in id_1):#(lf)        return 1#(lf)#(lf)    elif any(keyword in row.lower() for keyword in id_2):#(lf)        return 2#(lf)#(lf)    elif any(keyword in row.lower() for keyword in id_3):#(lf)        return 3#(lf)#(lf)    elif any(keyword in row.lower() for keyword in id_4):#(lf)        return 4#(lf)#(lf)    elif any(keyword in row.lower() for keyword in id_5):#(lf)        return 5#(lf)#(lf)    elif any(keyword in row.lower() for keyword in id_6):#(lf)        return 6#(lf)#(lf)    elif any(keyword in row.lower() for keyword in id_7):#(lf)        return 7#(lf)#(lf)    elif any(keyword in row.lower() for keyword in id_8):#(lf)        return 8#(lf)#(lf)    elif any(keyword in row.lower() for keyword in id_9):#(lf)        return 9#(lf)#(lf)    else:#(lf)        return 9#(lf)#(lf)#(lf)def update_impact_id(row):#(lf)    if row['Impact ID'] == 17 and row['Report Type ID'] == 22:#(lf)        return 2#(lf)    elif row['Impact ID'] == 17 and (row['Report Type ID'] == 23 or row['Report Type ID'] == 24):#(lf)        return 3#(lf)    elif row['Impact ID'] == 17 and (row['Report Type ID'] == 13 or row['Report Type ID'] == 14):#(lf)        return 4#(lf)    elif row['Impact ID'] == 17 and row['Report Type ID'] == 4:#(lf)        return 5#(lf)    elif row['Impact ID'] == 17 and row['Report Type ID'] == 18:#(lf)        return 9#(lf)    elif row['Impact ID'] == 17 and row['Report Type ID'] == 11:#(lf)        return 10#(lf)    elif row['Impact ID'] == 17 and row['Report Type ID'] == 7:#(lf)        return 11#(lf)    elif row['Impact ID'] == 17 and row['Report Type ID'] == 17:#(lf)        return 12#(lf)    elif row['Impact ID'] == 17 and row['Report Type ID'] == 20:#(lf)        return 16#(lf)    else:#(lf)        return row['Impact ID']#(lf)#(lf)#(lf)def update_action_id(row):#(lf)    if row['Action ID'] == 9 and row['Report Type ID'] == 6:#(lf)        return 2#(lf)    elif row['Action ID'] == 9 and row['Report Type ID'] == 8:#(lf)        return 3#(lf)    elif row['Action ID'] == 9 and row['Report Type ID'] == 7:#(lf)        return 5#(lf)    else:#(lf)        return row['Action ID']#(lf)#(lf)#(lf)def replace_values(value):#(lf)    lower_value = str(value).lower().strip()#(lf)    if lower_value in [val.lower().strip() for val in values_to_replace]:#(lf)        return pd.NaT#(lf)    return value#(lf)#(lf)#(lf)def replace_string_to_zero(value):#(lf)    lower_value = str(value).lower()#(lf)    if lower_value in [val.lower() for val in strings_to_zero]:#(lf)        return 0#(lf)    return value#(lf)#(lf)#(lf)'''Cleaning sheets and concatenate data'''#(lf)#(lf)# Iterate through individual sheets in the Excel workbook#(lf)for sheet_name, sheet_data in wb.items():#(lf)#(lf)    # Find the index of the first row containing strings#(lf)    first_string_row = sheet_data[sheet_data.map(#(lf)        lambda x: isinstance(x, str)).all(axis=1)].index[0]#(lf)#(lf)    # Use the first string row as column names#(lf)    sheet_data.columns = sheet_data.iloc[first_string_row]#(lf)#(lf)    # Remove rows before the first column name row#(lf)    sheet_data = sheet_data.iloc[first_string_row + 1:]#(lf)#(lf)    # Rename column names#(lf)    for old_column, new_column in {#(lf)        'Date': 'Date Event Began',#(lf)        'Time': 'Time Event Began',#(lf)        'Restoration': 'Restoration Time',#(lf)        'Type of Disturbance': 'Event Type',#(lf)        'Loss (megawatts)': 'Demand Loss (MW)',#(lf)        'Number of Customers Affected 1[1]': 'Number of Customers Affected 1',#(lf)        'Area': 'Area Affected',#(lf)        ' NERC Region': 'NERC Region'#(lf)    }.items():#(lf)        if old_column in sheet_data.columns:#(lf)            sheet_data = sheet_data.rename(columns={old_column: new_column})#(lf)#(lf)   # Store the original data before filtering#(lf)    original_data = sheet_data.copy()#(lf)#(lf)    # Filter out all empty rows#(lf)    sheet_data = sheet_data.dropna(how='all')#(lf)#(lf)    # Filter out rows where date event began is NA#(lf)    sheet_data = sheet_data[~pd.isna(sheet_data['Date Event Began'])]#(lf)#(lf)   # Filter out rows with values to exclude using from date event began column#(lf)    sheet_data = sheet_data[sheet_data['Date Event Began'].apply(#(lf)        lambda x: all(val.lower() not in str(x).lower() for val in values_to_exclude))]#(lf)#(lf)    # Calculate what rows are filtered out and store it in data_removed dataframe#(lf)    removed_rows = original_data.merge(#(lf)        sheet_data, how='outer', indicator=True).loc[lambda x: x['_merge'] == 'left_only'].drop('_merge', axis=1)#(lf)#(lf)    data_removed = pd.concat([data_removed, removed_rows], ignore_index=True)#(lf)#(lf)    # Handle the sheets where the restoration date and time are in single column and split the column#(lf)    if 'Restoration Time' in sheet_data.columns:#(lf)#(lf)        # Clean rows with string and no date and time values to pd.NaT#(lf)        sheet_data['Restoration Time'] = sheet_data['Restoration Time'].apply(#(lf)            replace_values)#(lf)#(lf)        # Parse the datetime column to datetime dtype and check for errors#(lf)        sheet_data['Restoration Time'] = sheet_data['Restoration Time'].astype(#(lf)            str).apply(parse_datetime_string, show_errors=True)#(lf)#(lf)        # Split columns if all errors are solved#(lf)        sheet_data[['Date of Restoration', 'Time of Restoration']] = sheet_data['Restoration Time'].apply(#(lf)            lambda x: pd.Series(str(x).split(#(lf)                ' ', 1) if pd.notna(x) else [None, None])#(lf)        )#(lf)#(lf)    # Parse Date and time columns#(lf)#(lf)    # Clean rows with string and no date and time values to pd.NaT#(lf)    sheet_data['Date of Restoration'] = sheet_data['Date of Restoration'].apply(#(lf)        replace_values)#(lf)    sheet_data['Time of Restoration'] = sheet_data['Time of Restoration'].apply(#(lf)        replace_values)#(lf)#(lf)    # Parse date and time columns#(lf)    sheet_data[\"\"Date Event Began\"\"] = sheet_data[\"\"Date Event Began\"\"].astype(#(lf)        str).apply(parse_date_string, show_errors=True)#(lf)#(lf)    sheet_data[\"\"Time Event Began\"\"] = sheet_data[\"\"Time Event Began\"\"].astype(#(lf)        str).apply(parse_time_string, show_errors=True)#(lf)#(lf)    sheet_data[\"\"Date of Restoration\"\"] = sheet_data[\"\"Date of Restoration\"\"].astype(#(lf)        str).apply(parse_date_string, show_errors=True)#(lf)#(lf)    sheet_data['Time of Restoration'] = sheet_data['Time of Restoration'].astype(#(lf)        str).apply(parse_time_string, show_errors=True)#(lf)#(lf)    sheet_data[\"\"Date of Restoration\"\"] = pd.to_datetime(#(lf)        sheet_data[\"\"Date of Restoration\"\"])#(lf)#(lf)    # Concatenate the modified sheet data to the data dataframe#(lf)    data = pd.concat([data, sheet_data], ignore_index=True)#(lf)#(lf)#(lf)# Filter out unnecesary columns#(lf)data = data[['Date Event Began', 'Time Event Began', 'Date of Restoration',#(tab)'Time of Restoration',#(tab)'Area Affected',#(lf)             'NERC Region',#(tab)'Alert Criteria', 'Event Type', 'Demand Loss (MW)', 'Number of Customers Affected']]#(lf)#(lf)# Sorting dataset and resetting index#(lf)data.sort_values(by='Date Event Began', ascending=True, inplace=True)#(lf)data.reset_index(drop=True, inplace=True)#(lf)#(lf)# Storing data from >= 2015#(lf)data_from_2015 = data[data['Date Event Began'] >= '01-01-2015'].copy()#(lf)#(lf)# Cleaning NERC Region column#(lf)#(lf)data_from_2015[\"\"NERC Region\"\"] = data_from_2015[\"\"NERC Region\"\"].str.strip()#(lf)#(lf)nerc_values_replace = {#(lf)    \"\"RF\"\": \"\"RFC\"\",#(lf)    \"\"RE\"\": \"\"TRE\"\",#(lf)    \"\"FRCC\"\": \"\"SERC\"\",#(lf)    \"\"SPP RE\"\": \"\"SPP/TRE\"\",#(lf)    \"\"RF/SERC\"\": \"\"RFC/SERC\"\",#(lf)    \"\"SERC/RF\"\":  \"\"RFC/SERC\"\",#(lf)    \"\"SERC / RF\"\": \"\"RFC/SERC\"\",#(lf)    \"\"SERC/MRO\"\": \"\"MRO/SERC\"\",#(lf)    \"\"MRO/RF\"\": \"\"MRO/RFC\"\",#(lf)    \"\"MRO / RF\"\": \"\"MRO/RFC\"\",#(lf)    \"\"WECC/MRO\"\": \"\"MRO/WECC\"\",#(lf)    \"\"RF/MRO\"\": \"\"MRO/RFC\"\",#(lf)    \"\"SPP, SERC, TRE\"\": \"\"SPP/SERC/TRE\"\",#(lf)    \"\"WECC/SERC\"\": \"\"SERC/WECC\"\"#(lf)}#(lf)#(lf)data_from_2015[\"\"NERC Region\"\"] = data_from_2015[\"\"NERC Region\"\"].replace(#(lf)    nerc_values_replace)#(lf)#(lf)# Add HI and PR if NERC Region is NA#(lf)data_from_2015.loc[data_from_2015[\"\"NERC Region\"\"].isna() & data_from_2015[\"\"Area Affected\"\"].str.lower(#(lf)).str.contains(\"\"puerto rico\"\", case=False, na=False), \"\"NERC Region\"\"] = \"\"PR\"\"#(lf)data_from_2015.loc[data_from_2015[\"\"NERC Region\"\"].isna() & data_from_2015[\"\"Area Affected\"\"].str.lower(#(lf)).str.contains(\"\"hawaii\"\", case=False, na=False), \"\"NERC Region\"\"] = \"\"HI\"\"#(lf)#(lf)#(lf)# Parsing Alert Criteria and Event Type columns into seperate ID columns#(lf)#(lf)# Report Type ID#(lf)data_from_2015[\"\"Report Type ID\"\"] = data_from_2015[\"\"Alert Criteria\"\"].apply(#(lf)    report_type_id)#(lf)#(lf)# Emergency Cause ID#(lf)data_from_2015[\"\"Cause ID\"\"] = data_from_2015[\"\"Event Type\"\"].apply(#(lf)    emergency_cause_id)#(lf)#(lf)# Emergency Impact ID#(lf)data_from_2015[\"\"Impact ID\"\"] = data_from_2015[\"\"Event Type\"\"].apply(#(lf)    emergency_impact_id)#(lf)data_from_2015['Impact ID'] = data_from_2015.apply(update_impact_id, axis=1)#(lf)#(lf)# Emergency Action ID#(lf)data_from_2015[\"\"Action ID\"\"] = data_from_2015[\"\"Event Type\"\"].apply(#(lf)    emergency_action_id)#(lf)data_from_2015['Action ID'] = data_from_2015.apply(update_action_id, axis=1)#(lf)#(lf)# Replacing Unknown and NA values in Demand Loss (MW) and Number of Customers Affected#(lf)data_from_2015['Demand Loss (MW)'] = data_from_2015['Demand Loss (MW)'].replace(#(lf)    'Unknown', 0)#(lf)data_from_2015['Number of Customers Affected'] = data_from_2015['Number of Customers Affected'].replace(#(lf)    'Unknown', 0)#(lf)data_from_2015['Number of Customers Affected'] = data_from_2015['Number of Customers Affected'].replace(#(lf)    pd.NA, 0)#(lf)#(lf)# Adding column Outage Time in minutes#(lf)data_from_2015.loc[2525, 'Date of Restoration'] = pd.to_datetime('2019-08-18')#(lf)data_from_2015['Outage Time'] = (data_from_2015['Date of Restoration'] + pd.to_timedelta(data_from_2015['Time of Restoration'])#(lf)                                 ) - (data_from_2015['Date Event Began'] + pd.to_timedelta(data_from_2015['Time Event Began']))#(lf)data_from_2015['Outage Time'] = data_from_2015['Outage Time'].dt.total_seconds() / 60#(lf)#(lf)# Removing outliers and duplicates#(lf)data_from_2015[data_from_2015['Outage Time'] < 0]#(lf)#(lf)# Filter duplicate rows#(lf)indices_to_filter = [1691, 2037, 2062, 2063, 2134, 2147, 2409, 2575, 2590, 2602, 2673, 3051, 3069,#(lf)                     3070, 3096, 3227, 3299, 3312, 3377, 3377, 3378, 3473, 3475, 3507, 3518, 3601, 3624, 3640, 3858, 3859]#(lf)#(lf)data_from_2015 = data_from_2015.drop(indices_to_filter)#(lf)data_from_2015.loc[2039, 'NERC Region'] = \"\"SERC/TRE\"\"#(lf)#(lf)# Sort Data and add Event ID Column#(lf)data_from_2015.sort_values(by=['Date Event Began', 'Time Event Began'], inplace=True)#(lf)#(lf)data_from_2015.reset_index(inplace=True, drop=True)#(lf)data_from_2015.index += 1 #(lf)data_from_2015.reset_index(drop=False,inplace=True)#(lf)data_from_2015.rename(columns={'index': 'Event ID'}, inplace=True)        #(lf)#(lf)#(lf)data_from_2015#(lf)\"),",
+                "    data_removed = Source{[Name=\"data_removed\"]}[Value],",
+                "    #\"Changed Type\" = Table.TransformColumnTypes(data_removed,{{\"Date Event Began\", type text}, {\"NERC Region\", type text}, {\"Time Event Began\", type text}, {\"Area Affected\", type text}, {\"Event Type\", type text}, {\"Demand Loss (MW)\", type text}, {\"Number of Customers Affected\", type text}, {\"Restoration Time\", type text}, {\"Number of Customers Affected 1\", type text}, {\"Date of Restoration\", type text}, {\"Time of Restoration\", type text}, {\"Month\", type text}, {\"Alert Criteria\", type text}, {\"Event Year\", type text}, {\"Event Month\", type text}})",
+                "in",
+                "    #\"Changed Type\""
+              ],
+              "type": "m"
+            }
+          }
+        ]
+      }
+    ]
+  }
+}

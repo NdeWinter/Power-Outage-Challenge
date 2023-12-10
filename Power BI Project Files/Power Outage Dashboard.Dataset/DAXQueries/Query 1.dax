@@ -1,0 +1,15 @@
+
+VAR MinDate = STARTOFYEAR('Incident Reports'[Date Event Began])
+VAR MaxDate = MAX('Incident Reports'[Date Event Began])
+
+RETURN
+    ADDCOLUMNS(
+        CALENDAR(MinDate, MaxDate),
+        "Year", YEAR([Date]),
+        "Quarter", "Q" & CEILING(MONTH([Date]) / 3, 1),    
+        "Month", MONTH([Date]),
+        "Month Name", FORMAT([Date], "MMMM"),
+        
+        "MonthYear", FORMAT([Date], "MMMM YYYY")
+       
+    )

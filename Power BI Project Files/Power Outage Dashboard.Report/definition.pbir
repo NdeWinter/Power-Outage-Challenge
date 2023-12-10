@@ -1,0 +1,9 @@
+{
+  "version": "1.0",
+  "datasetReference": {
+    "byPath": {
+      "path": "../Power Outage Dashboard.Dataset"
+    },
+    "byConnection": null
+  }
+}
