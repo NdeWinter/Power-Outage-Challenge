@@ -1,11 +1,10 @@
 import pandas as pd
-import seaborn as sns
-import geopandas as gpd
 
 from dateutil import parser
 
 # Import dataset
-path = r'C:\Users\niels\OneDrive\7. Portfolio Data Analytics\Challenges\Maven Analytics - Power Outage\Data\DOE_Electric_Disturbance_Events.xlsx'
+path = r'C:\Users\niels\OneDrive\7. Portfolio Data Analytics\Challenges\Maven Analytics\Power-Outage-Challenge\Data\DOE_Electric_Disturbance_Events.xlsx'
+
 wb = pd.read_excel(path, sheet_name=None)
 
 # Prepare dataframes
@@ -142,11 +141,12 @@ def parse_date_string(date_string, show_errors=False):
 
 # Functions for parsing Alert Criteria and Event Type column
 
-
 def report_type_id(row):
     if pd.isna(row) or row == '':
         return None
 
+    type_id_list = []
+    
     id_1 = ['physical attack that causes major interruptions or impacts']
     id_2 = ['cyber event that causes interruptions',
             'reportable cyber security incident']
@@ -156,7 +156,7 @@ def report_type_id(row):
     id_6 = ['firm load shedding of 100 megawatts',
             'load shedding of 100 megawatts or more', 'load shed 100']
     id_7 = ['voltage reductions of 3 percent', 'voltage reduction']
-    id_8 = ['public appeal to reduce']
+    id_8 = ['public appeal to reduce', 'public appeal']
     id_9 = ['physical attack that could potentially impact electric power system',
             'actual physical attack']
     id_10 = ['cyber event that could potentially impact electric power system',
@@ -183,92 +183,24 @@ def report_type_id(row):
         'complete loss of interpersonal communication and alternative interpersonal communication']
     id_24 = ['loss of monitoring or control']
 
-    if any(keyword in row.lower() for keyword in id_1):
-        return 1
+    # Define a list of lists containing all the id lists
+    all_id_lists = [id_1, id_2, id_3, id_4, id_5, id_6, id_7, id_8, id_9, id_10, id_11, id_12, id_13, id_14, id_15, id_16, id_17, id_18, id_19, id_20, id_21, id_22, id_23, id_24]
 
-    elif any(keyword in row.lower() for keyword in id_2):
-        return 2
+    for idx, id_list in enumerate(all_id_lists, start=1):
+        if any(keyword in row.lower() for keyword in id_list):
+            type_id_list.append(idx)
 
-    elif any(keyword in row.lower() for keyword in id_3):
-        return 3
-
-    elif any(keyword in row.lower() for keyword in id_4):
-        return 4
-
-    elif any(keyword in row.lower() for keyword in id_5):
-        return 5
-
-    elif any(keyword in row.lower() for keyword in id_6):
-        return 6
-
-    elif any(keyword in row.lower() for keyword in id_7):
-        return 7
-
-    elif any(keyword in row.lower() for keyword in id_8):
-        return 8
-
-    elif any(keyword in row.lower() for keyword in id_9):
-        return 9
-
-    elif any(keyword in row.lower() for keyword in id_10):
-        return 10
-
-    elif any(keyword in row.lower() for keyword in id_11):
-        return 11
-
-    elif any(keyword in row.lower() for keyword in id_12):
-        return 12
-
-    elif any(keyword in row.lower() for keyword in id_13):
-        return 13
-
-    elif any(keyword in row.lower() for keyword in id_14):
-        return 14
-
-    elif any(keyword in row.lower() for keyword in id_15):
-        return 15
-
-    elif any(keyword in row.lower() for keyword in id_16):
-        return 16
-
-    elif any(keyword in row.lower() for keyword in id_17):
-        return 17
-
-    elif any(keyword in row.lower() for keyword in id_18):
-        return 18
-
-    elif any(keyword in row.lower() for keyword in id_19):
-        return 19
-
-    elif any(keyword in row.lower() for keyword in id_20):
-        return 20
-
-    elif any(keyword in row.lower() for keyword in id_21):
-        return 21
-
-    elif any(keyword in row.lower() for keyword in id_22):
-        return 22
-
-    elif any(keyword in row.lower() for keyword in id_23):
-        return 23
-
-    elif any(keyword in row.lower() for keyword in id_24):
-        return 24
-
-    else:
-        return 24
-
+    return type_id_list if type_id_list else [24]  
 
 def emergency_cause_id(row):
     if pd.isna(row) or row == '':
-        return
+        return None
 
     id_1 = ["unknown"]
-    id_2 = ['physical attack', 'sabotage', 'actual physical event',
-            'suspected physical attack', 'suspected sabotage', 'suspected telecommunications attack']
-    id_3 = ['threat of physical', 'potential physical attack']
+    id_2 = ['physical attack', 'sabotage', 'actual physical event']
+    id_3 = ['threat of physical', 'potential physical attack', 'suspected physical attack', 'suspected sabotage', 'suspected telecommunications attack']
     id_4 = ['vandalsim', 'vandalism']
-    id_5 = ['theft']
+    id_5 = ['theft', 'vandalism - theft']
     id_6 = ['suspicious activity']
     id_7 = []
     id_8 = ['cyber']
@@ -277,58 +209,18 @@ def emergency_cause_id(row):
     id_11 = ['transmission equipment', 'transmission  equipment', 'transmission system', 'transmission level',
              'equipment trip', 'equipment failure', 'equipment malfunction', 'equipment faulted', 'transformer failure']
     id_12 = ["switch", "failure at high voltage substation", 'substation']
-    id_13 = ['weather', 'natural disaster', 'storm', 'lightning', 'wind', 'tornado', 'hurricane', 'heat wave', 'heatwave'
+    id_13 = ['weather', 'natural disaster', 'storm', 'lightning', 'wind', 'tornado', 'hurricane', 'heat wave', 'heatwave',
              'earthquake', 'earthquake', 'wildfire', 'brush fire', 'tropical', 'ice', 'flood', 'rain', 'wild fire', 'high winds', 'high temperatures', 'wild land fire']
     id_14 = ["operator"]
     id_15 = ['other']
 
-    if any(keyword in row.lower() for keyword in id_1):
-        return 1
+    all_id_lists = [id_1, id_2, id_3, id_5, id_5, id_6, id_7, id_8, id_9, id_10, id_11, id_12, id_13, id_14, id_15]
 
-    elif any(keyword in row.lower() for keyword in id_3):
-        return 3
+    for idx, id_list in enumerate(all_id_lists, start=1):
+        if any(keyword in row.lower() for keyword in id_list):
+            return idx
 
-    elif any(keyword in row.lower() for keyword in id_5):
-        return 5
-
-    elif any(keyword in row.lower() for keyword in id_4):
-        return 4
-
-    elif any(keyword in row.lower() for keyword in id_6):
-        return 6
-
-    elif any(keyword in row.lower() for keyword in id_2):
-        return 2
-
-    elif any(keyword in row.lower() for keyword in id_7):
-        return 7
-
-    elif any(keyword in row.lower() for keyword in id_8):
-        return 8
-
-    elif any(keyword in row.lower() for keyword in id_13):
-        return 13
-
-    elif any(keyword in row.lower() for keyword in id_9):
-        return 9
-
-    elif any(keyword in row.lower() for keyword in id_10):
-        return 10
-
-    elif any(keyword in row.lower() for keyword in id_11):
-        return 11
-
-    elif any(keyword in row.lower() for keyword in id_12):
-        return 12
-
-    elif any(keyword in row.lower() for keyword in id_14):
-        return 14
-
-    elif any(keyword in row.lower() for keyword in id_15):
-        return 15
-
-    else:
-        return 15
+    return 15  
 
 
 def emergency_impact_id(row):
@@ -357,64 +249,20 @@ def emergency_impact_id(row):
     id_16 = ['nuclear generating']
     id_17 = ['other']
 
-    if any(keyword in row.lower() for keyword in id_1):
-        return 1
+    # Define a list of lists containing all the id lists
+    all_id_lists = [id_1, id_2, id_3, id_4, id_5, id_6, id_7, id_8, id_9, id_10, id_11, id_12, id_13, id_14, id_15, id_16, id_17]
 
-    elif any(keyword in row.lower() for keyword in id_2):
-        return 2
+    for idx, id_list in enumerate(all_id_lists, start=1):
+        if any(keyword in row.lower() for keyword in id_list):
+            return idx
 
-    elif any(keyword in row.lower() for keyword in id_3):
-        return 3
-
-    elif any(keyword in row.lower() for keyword in id_4):
-        return 4
-
-    elif any(keyword in row.lower() for keyword in id_5):
-        return 5
-
-    elif any(keyword in row.lower() for keyword in id_6):
-        return 6
-
-    elif any(keyword in row.lower() for keyword in id_7):
-        return 7
-
-    elif any(keyword in row.lower() for keyword in id_8):
-        return 8
-
-    elif any(keyword in row.lower() for keyword in id_9):
-        return 9
-
-    elif any(keyword in row.lower() for keyword in id_10):
-        return 10
-
-    elif any(keyword in row.lower() for keyword in id_11):
-        return 11
-
-    elif any(keyword in row.lower() for keyword in id_12):
-        return 12
-
-    elif any(keyword in row.lower() for keyword in id_13):
-        return 13
-
-    elif any(keyword in row.lower() for keyword in id_14):
-        return 14
-
-    elif any(keyword in row.lower() for keyword in id_15):
-        return 15
-
-    elif any(keyword in row.lower() for keyword in id_16):
-        return 16
-
-    elif any(keyword in row.lower() for keyword in id_17):
-        return 17
-
-    else:
-        return 17
+    return 17  
 
 
 def emergency_action_id(row):
     if pd.isna(row) or row == '':
         return 9
+    
     id_1 = ['none']
     id_2 = ['load shedding of 100 megawatt',
             'load shed 100+', 'load shed of 100+', ]
@@ -429,69 +277,60 @@ def emergency_action_id(row):
             'initiated interruption of air conditioner']
     id_9 = ['other']
 
-    if any(keyword in row.lower() for keyword in id_1):
-        return 1
+    # Define a list of lists containing all the id lists
+    all_id_lists = [id_1, id_2, id_3, id_4, id_5, id_6, id_7, id_8, id_9]
 
-    elif any(keyword in row.lower() for keyword in id_2):
-        return 2
+    for idx, id_list in enumerate(all_id_lists, start=1):
+        if any(keyword in row.lower() for keyword in id_list):
+            return idx
 
-    elif any(keyword in row.lower() for keyword in id_3):
-        return 3
-
-    elif any(keyword in row.lower() for keyword in id_4):
-        return 4
-
-    elif any(keyword in row.lower() for keyword in id_5):
-        return 5
-
-    elif any(keyword in row.lower() for keyword in id_6):
-        return 6
-
-    elif any(keyword in row.lower() for keyword in id_7):
-        return 7
-
-    elif any(keyword in row.lower() for keyword in id_8):
-        return 8
-
-    elif any(keyword in row.lower() for keyword in id_9):
-        return 9
-
-    else:
-        return 9
-
+    return 9  
 
 def update_impact_id(row):
-    if row['Impact ID'] == 17 and row['Report Type ID'] == 22:
-        return 2
-    elif row['Impact ID'] == 17 and (row['Report Type ID'] == 23 or row['Report Type ID'] == 24):
-        return 3
-    elif row['Impact ID'] == 17 and (row['Report Type ID'] == 13 or row['Report Type ID'] == 14):
-        return 4
-    elif row['Impact ID'] == 17 and row['Report Type ID'] == 4:
-        return 5
-    elif row['Impact ID'] == 17 and row['Report Type ID'] == 18:
-        return 9
-    elif row['Impact ID'] == 17 and row['Report Type ID'] == 11:
-        return 10
-    elif row['Impact ID'] == 17 and row['Report Type ID'] == 7:
-        return 11
-    elif row['Impact ID'] == 17 and row['Report Type ID'] == 17:
-        return 12
-    elif row['Impact ID'] == 17 and row['Report Type ID'] == 20:
-        return 16
-    else:
-        return row['Impact ID']
-
+    result_list = []
+    
+    impact_id = row['Impact ID']
+    
+    for report_type_id in row['Report Type ID']:
+        if impact_id == 17 and report_type_id == 22:
+            result_list.append(2)
+        elif impact_id == 17 and report_type_id in [23, 24]:
+            result_list.append(3)
+        elif impact_id == 17 and report_type_id in [13, 14]:
+            result_list.append(4)
+        elif impact_id == 17 and report_type_id == 4:
+            result_list.append(5)
+        elif impact_id == 17 and report_type_id == 18:
+            result_list.append(9)
+        elif impact_id == 17 and report_type_id == 11:
+            result_list.append(10)
+        elif impact_id == 17 and report_type_id == 7:
+            result_list.append(11)
+        elif impact_id == 17 and report_type_id == 17:
+            result_list.append(12)
+        elif impact_id == 17 and report_type_id == 20:
+            result_list.append(16)
+        else:
+            result_list.append(impact_id)
+    
+    return result_list
 
 def update_action_id(row):
-    if row['Action ID'] == 9 and row['Report Type ID'] == 6:
-        return 2
-    elif row['Action ID'] == 9 and row['Report Type ID'] == 8:
-        return 3
-    elif row['Action ID'] == 9 and row['Report Type ID'] == 7:
-        return 5
-    else:
-        return row['Action ID']
+    result_list = []
+    
+    action_id = row['Action ID']
+    
+    for report_type_id in row['Report Type ID']:
+        if action_id == 9 and report_type_id == 6:
+            result_list.append(2)
+        elif action_id == 9 and report_type_id == 8:
+            result_list.append(3)
+        elif action_id == 9 and report_type_id == 7:
+            result_list.append(5)
+        else:
+            result_list.append(action_id)
+    
+    return result_list
 
 
 def replace_values(value):
@@ -693,9 +532,11 @@ data_from_2015.sort_values(by=['Date Event Began', 'Time Event Began'], inplace=
 data_from_2015.reset_index(inplace=True, drop=True)
 data_from_2015.index += 1 
 data_from_2015.reset_index(drop=False,inplace=True)
+
+data_from_2015['Report Type ID'] = data_from_2015['Report Type ID'].astype(str)
 data_from_2015.rename(columns={'index': 'Event ID'}, inplace=True)        
 
-
-
-
 data_from_2015
+
+
+#data_from_2015.to_excel("data.xlsx", index = False)
